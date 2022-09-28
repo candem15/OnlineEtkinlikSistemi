@@ -14,8 +14,8 @@ namespace OES.API.Domain.Entities
         public int KatilimciKapasitesi { get; set; }
         public Etkinlik Etkinlik { get; set; }
         [NotMapped]
-        public override DateTime UpdatedDate { get => base.UpdatedDate; set => base.UpdatedDate = value; }
+        public override DateTime GuncellenmeTarihi { get => base.GuncellenmeTarihi; set => base.GuncellenmeTarihi = value; }
         [NotMapped]
-        public override DateTime CreatedDate { get => base.CreatedDate; set => base.CreatedDate = value; }
+        public override DateTime OlusturulmaTarihi { get => base.OlusturulmaTarihi; set => base.OlusturulmaTarihi = value; }
     }
 }
