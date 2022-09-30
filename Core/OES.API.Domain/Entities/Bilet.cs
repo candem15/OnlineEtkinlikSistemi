@@ -10,6 +10,7 @@ namespace OES.API.Domain.Entities
     public class Bilet : BaseEntity
 
     {
+        public Guid EtkinlikId { get; set; }
         public double BiletUcreti { get; set; }
         public Etkinlik Etkinlik { get; set; }
     }

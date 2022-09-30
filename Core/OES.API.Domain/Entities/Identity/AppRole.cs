@@ -9,6 +9,5 @@ namespace OES.API.Domain.Identity
 {
     public class AppRole : IdentityRole<string>
     {
-        public string Name { get; set; }
     }
 }

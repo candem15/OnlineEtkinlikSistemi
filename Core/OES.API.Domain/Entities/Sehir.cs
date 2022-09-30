@@ -11,7 +11,7 @@ namespace OES.API.Domain.Entities
     public class Sehir : BaseEntity
     {
         public string SehirAdi { get; set; }
-        public ICollection<Etkinlik> Etkinlikler { get; set; }
+        public ICollection<Etkinlik>? Etkinlikler { get; set; }
         [NotMapped]
         public override DateTime GuncellenmeTarihi { get => base.GuncellenmeTarihi; set => base.GuncellenmeTarihi = value; }
         [NotMapped]

@@ -10,6 +10,7 @@ namespace OES.API.Domain.Entities
 {
     public class Kontenjan : BaseEntity
     {
+        public Guid EtkinlikId { get; set; }
         public int KatilimciSayisi { get; set; }
         public int KatilimciKapasitesi { get; set; }
         public Etkinlik Etkinlik { get; set; }

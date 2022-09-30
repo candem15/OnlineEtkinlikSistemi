@@ -14,7 +14,7 @@ namespace OES.API.Persistence
             get
             {
                 ConfigurationManager configurationManager = new();
-                configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/eCommerceAPI.WebAPI/"));
+                configurationManager.SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../../Presentation/OES.API.WebApi/"));
                 configurationManager.AddJsonFile("appsettings.json");
                 return configurationManager.GetConnectionString("DockerPostgreSQL");
             }
