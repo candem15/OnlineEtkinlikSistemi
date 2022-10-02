@@ -17,11 +17,11 @@ namespace OES.API.Persistence.Contexts
         public OESAPIDbContext(DbContextOptions options) : base(options)
         { }
 
-        public DbSet<Kategori> Kategoriler { get; set; }
-        public DbSet<Etkinlik> Etkinlikler { get; set; }
-        public DbSet<Sehir> Sehirler { get; set; }
-        public DbSet<Kontenjan> Kontenjanlar { get; set; }
-        public DbSet<Bilet> Biletler { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Event> Events { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Quota> Quotas { get; set; }
+        public DbSet<Ticket> Tickets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -39,7 +39,7 @@ namespace OES.API.Persistence.Contexts
                     Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     UserName = "admin",
                     NormalizedUserName = "ADMIN",
-                    Ad = "admin",
+                    Name = "admin",
                     PasswordHash = hasher.HashPassword(null, "adminPassword")
                 }
             );
@@ -64,10 +64,10 @@ namespace OES.API.Persistence.Contexts
                 switch (data.State)
                 {
                     case EntityState.Modified:
-                        data.Entity.GuncellenmeTarihi = DateTime.UtcNow;
+                        data.Entity.UpdatedDate = DateTime.UtcNow;
                         break;
                     case EntityState.Added:
-                        data.Entity.OlusturulmaTarihi = DateTime.UtcNow;
+                        data.Entity.CreatedDate = DateTime.UtcNow;
                         break;
                     default:
                         break;

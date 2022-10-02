@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Identity;
 using OES.API.Persistence.Contexts;
 using OES.API.Persistence.Repositories;
+using OES.API.Persistence.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,17 +32,23 @@ namespace OES.API.Persistence
                 options.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<OESAPIDbContext>();
 
-            services.AddScoped<IEtkinlikReadRepository, EtkinlikReadRepository>();
-            services.AddScoped<IEtkinlikWriteRepository, EtkinlikWriteRepository>();
+            services.AddScoped<IEventReadRepository, EventReadRepository>();
+            services.AddScoped<IEventWriteRepository, EventWriteRepository>();
 
-            services.AddScoped<IKategoriReadRepository, KategoriReadRepository>();
-            services.AddScoped<IKategoriWriteRepository, KategoriWriteRepository>();
+            services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
+            services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
 
-            services.AddScoped<ISehirReadRepository, SehirReadRepository>();
-            services.AddScoped<ISehirWriteRepository, SehirWriteRepository>();
+            services.AddScoped<ICityReadRepository, CityReadRepository>();
+            services.AddScoped<ICityWriteRepository, CityWriteRepository>();
 
-            services.AddScoped<IKontenjanReadRepository, KontenjanReadRepository>();
-            services.AddScoped<IKontenjanWriteRepository, KontenjanWriteRepository>();
+            services.AddScoped<IQuotaReadRepository, QuotaReadRepository>();
+            services.AddScoped<IQuotaWriteRepository, QuotaWriteRepository>();
+
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<ICityService, CityService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IEventService, EventService>();
         }
     }
 }

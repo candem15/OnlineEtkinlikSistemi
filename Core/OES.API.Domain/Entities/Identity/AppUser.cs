@@ -10,8 +10,8 @@ namespace OES.API.Domain.Identity
 {
     public class AppUser : IdentityUser<string>
     {
-        public string Ad { get; set; }
-        public ICollection<Etkinlik>? Etkinlikler { get; set; }
-        public string? WebSitesi { get; set; }
+        public string Name { get; set; }
+        public ICollection<Event>? Events { get; set; }
+        public string? WebAddressUrl { get; set; }
     }
 }

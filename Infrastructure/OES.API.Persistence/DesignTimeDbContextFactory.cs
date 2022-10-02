@@ -11,7 +11,7 @@ namespace OES.API.Persistence
 {
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<OESAPIDbContext>
     {
-        public OESAPIDbContext CreateDbContext(string[] args) //Bu bize cli ile persistent içerisinden migration oluşturabilmemizi sağlıyacak.
+        public OESAPIDbContext CreateDbContext(string[] args) //Cli ile persistent içerisinden migration oluşturabilmek için.
         {
             DbContextOptionsBuilder<OESAPIDbContext> dbContextOptionsBuilder = new();
             dbContextOptionsBuilder.UseNpgsql(Configuration.ConnectionStringDockerPg);

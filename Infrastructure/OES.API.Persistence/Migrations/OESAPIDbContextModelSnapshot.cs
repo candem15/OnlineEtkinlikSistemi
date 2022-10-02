@@ -22,19 +22,19 @@ namespace OES.API.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AppUserEtkinlik", b =>
+            modelBuilder.Entity("AppUserEvent", b =>
                 {
-                    b.Property<Guid>("EtkinliklerId")
+                    b.Property<Guid>("EventsId")
                         .HasColumnType("uuid");
 
-                    b.Property<string>("KatilimcilarId")
+                    b.Property<string>("UsersId")
                         .HasColumnType("text");
 
-                    b.HasKey("EtkinliklerId", "KatilimcilarId");
+                    b.HasKey("EventsId", "UsersId");
 
-                    b.HasIndex("KatilimcilarId");
+                    b.HasIndex("UsersId");
 
-                    b.ToTable("AppUserEtkinlik");
+                    b.ToTable("AppUserEvent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -150,130 +150,130 @@ namespace OES.API.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Bilet", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<double>("BiletUcreti")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("EtkinlikId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("GuncellenmeTarihi")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("OlusturulmaTarihi")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EtkinlikId")
-                        .IsUnique();
-
-                    b.ToTable("Biletler");
+                    b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Etkinlik", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.City", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("Aciklama")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Adres")
+                    b.Property<string>("CityName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("EtkinlikAdi")
+                    b.HasKey("Id");
+
+                    b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Entities.Event", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<bool>("EtkinlikOnayi")
+                    b.Property<DateTime>("ApplicationDeadline")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CityId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("EventConfirmation")
                         .HasColumnType("boolean");
 
-                    b.Property<DateTime>("EtkinlikTarihi")
+                    b.Property<DateTime>("EventDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("GuncellenmeTarihi")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("KategoriId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("OlusturulmaTarihi")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid>("SehirId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("SonBasvuruTarihi")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("KategoriId");
-
-                    b.HasIndex("SehirId");
-
-                    b.ToTable("Etkinlikler");
-                });
-
-            modelBuilder.Entity("OES.API.Domain.Entities.Kategori", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("KategoriAdi")
+                    b.Property<string>("EventName")
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Kategoriler");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Kontenjan", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.Quota", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("EtkinlikId")
+                    b.Property<Guid>("EventId")
                         .HasColumnType("uuid");
 
-                    b.Property<int>("KatilimciKapasitesi")
+                    b.Property<int>("MaxParticipantsNumber")
                         .HasColumnType("integer");
 
-                    b.Property<int>("KatilimciSayisi")
+                    b.Property<int>("NumberOfParticipants")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EtkinlikId")
+                    b.HasIndex("EventId")
                         .IsUnique();
 
-                    b.ToTable("Kontenjanlar");
+                    b.ToTable("Quotas");
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Sehir", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.Ticket", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<string>("SehirAdi")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uuid");
+
+                    b.Property<double>("TicketPrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sehirler");
+                    b.HasIndex("EventId")
+                        .IsUnique();
+
+                    b.ToTable("Tickets");
                 });
 
             modelBuilder.Entity("OES.API.Domain.Identity.AppRole", b =>
@@ -305,21 +305,21 @@ namespace OES.API.Persistence.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "ce2b828b-a838-4029-b8f5-6630525a2851",
+                            ConcurrencyStamp = "96d48e6d-0eef-470f-a0e7-75d1443ffd89",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "391c72c8-9403-4c93-a4a4-4c2febd00d74",
-                            ConcurrencyStamp = "aaac9be2-479f-4eaa-8184-ef0f84e104ce",
+                            ConcurrencyStamp = "54b3f4f0-608e-487b-a1fd-5545fa9e8b91",
                             Name = "Basit",
                             NormalizedName = "BASIT"
                         },
                         new
                         {
                             Id = "9505059f-22c8-4940-9889-52d6d05b5790",
-                            ConcurrencyStamp = "503da83b-d064-4017-8651-24a6deedabab",
+                            ConcurrencyStamp = "c6a2951e-dfda-4d11-8389-899ca582e2b6",
                             Name = "Firma",
                             NormalizedName = "FIRMA"
                         });
@@ -332,10 +332,6 @@ namespace OES.API.Persistence.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("integer");
-
-                    b.Property<string>("Ad")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -353,6 +349,10 @@ namespace OES.API.Persistence.Migrations
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -381,7 +381,7 @@ namespace OES.API.Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<string>("WebSitesi")
+                    b.Property<string>("WebAddressUrl")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -400,29 +400,29 @@ namespace OES.API.Persistence.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            Ad = "admin",
-                            ConcurrencyStamp = "2f73601b-02d5-4fd6-b5ab-a0e2476c78ec",
+                            ConcurrencyStamp = "1ac1e09a-3cba-4b20-b5b0-b87b89d55890",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
+                            Name = "admin",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEM9v34Q5LAYiflruSWomkfpKHWJJiRbmHhk03t2wxqEY/laJMxSW1xz1/vaAR3C2lQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIzGWL/DJzIJExxL+AOIfyqD8TUtHKcboGuF56QBlwvj/5EAFPZGwh0tF53K2tPO6g==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
                 });
 
-            modelBuilder.Entity("AppUserEtkinlik", b =>
+            modelBuilder.Entity("AppUserEvent", b =>
                 {
-                    b.HasOne("OES.API.Domain.Entities.Etkinlik", null)
+                    b.HasOne("OES.API.Domain.Entities.Event", null)
                         .WithMany()
-                        .HasForeignKey("EtkinliklerId")
+                        .HasForeignKey("EventsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OES.API.Domain.Identity.AppUser", null)
                         .WithMany()
-                        .HasForeignKey("KatilimcilarId")
+                        .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -478,63 +478,63 @@ namespace OES.API.Persistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Bilet", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.Event", b =>
                 {
-                    b.HasOne("OES.API.Domain.Entities.Etkinlik", "Etkinlik")
-                        .WithOne("Bilet")
-                        .HasForeignKey("OES.API.Domain.Entities.Bilet", "EtkinlikId")
+                    b.HasOne("OES.API.Domain.Entities.Category", "Category")
+                        .WithMany("Events")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Etkinlik");
-                });
-
-            modelBuilder.Entity("OES.API.Domain.Entities.Etkinlik", b =>
-                {
-                    b.HasOne("OES.API.Domain.Entities.Kategori", "Kategori")
-                        .WithMany("Etkinlikler")
-                        .HasForeignKey("KategoriId")
+                    b.HasOne("OES.API.Domain.Entities.City", "City")
+                        .WithMany("Events")
+                        .HasForeignKey("CityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OES.API.Domain.Entities.Sehir", "Sehir")
-                        .WithMany("Etkinlikler")
-                        .HasForeignKey("SehirId")
+                    b.Navigation("Category");
+
+                    b.Navigation("City");
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Entities.Quota", b =>
+                {
+                    b.HasOne("OES.API.Domain.Entities.Event", "Event")
+                        .WithOne("Quota")
+                        .HasForeignKey("OES.API.Domain.Entities.Quota", "EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Kategori");
-
-                    b.Navigation("Sehir");
+                    b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Kontenjan", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.Ticket", b =>
                 {
-                    b.HasOne("OES.API.Domain.Entities.Etkinlik", "Etkinlik")
-                        .WithOne("Kontenjan")
-                        .HasForeignKey("OES.API.Domain.Entities.Kontenjan", "EtkinlikId")
+                    b.HasOne("OES.API.Domain.Entities.Event", "Event")
+                        .WithOne("Ticket")
+                        .HasForeignKey("OES.API.Domain.Entities.Ticket", "EventId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Etkinlik");
+                    b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Etkinlik", b =>
+            modelBuilder.Entity("OES.API.Domain.Entities.Category", b =>
                 {
-                    b.Navigation("Bilet");
+                    b.Navigation("Events");
+                });
 
-                    b.Navigation("Kontenjan")
+            modelBuilder.Entity("OES.API.Domain.Entities.City", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Entities.Event", b =>
+                {
+                    b.Navigation("Quota")
                         .IsRequired();
-                });
 
-            modelBuilder.Entity("OES.API.Domain.Entities.Kategori", b =>
-                {
-                    b.Navigation("Etkinlikler");
-                });
-
-            modelBuilder.Entity("OES.API.Domain.Entities.Sehir", b =>
-                {
-                    b.Navigation("Etkinlikler");
+                    b.Navigation("Ticket");
                 });
 #pragma warning restore 612, 618
         }
