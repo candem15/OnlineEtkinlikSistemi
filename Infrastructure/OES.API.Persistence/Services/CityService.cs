@@ -2,6 +2,7 @@
 using OES.API.Application.Features.Commands.City.CreateCity;
 using OES.API.Application.Features.Commands.City.DeleteCity;
 using OES.API.Application.Features.Commands.City.UpdateCity;
+using OES.API.Application.Features.Queries.City.GetAllCities;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
 using System;
@@ -61,6 +62,13 @@ namespace OES.API.Persistence.Services
             await _cityWriteRepository.RemoveAsync(cityId);
             await _cityWriteRepository.SaveChangesAsync();
             return new DeleteCityCommandResponse { Message = $"{cityToDelete.CityName} isimli şehir başarıyla silinmiştir!", Succeeded = true };
+        }
+
+        public async Task<GetAllCitiesQueryResponse> GetAllCitiesAsync()
+        {
+            List<City> cities = _cityReadRepository.GetAll().ToList();
+
+            return new GetAllCitiesQueryResponse() { Cities = cities };
         }
     }
 }

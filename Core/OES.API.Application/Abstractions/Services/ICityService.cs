@@ -1,6 +1,7 @@
 ﻿using OES.API.Application.Features.Commands.City.CreateCity;
 using OES.API.Application.Features.Commands.City.DeleteCity;
 using OES.API.Application.Features.Commands.City.UpdateCity;
+using OES.API.Application.Features.Queries.City.GetAllCities;
 using OES.API.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,5 +16,6 @@ namespace OES.API.Application.Abstractions.Services
         Task<CreateCityCommandResponse> CreateAsync(City city);
         Task<UpdateCityCommandResponse> UpdateAsync(City city);
         Task<DeleteCityCommandResponse> DeleteAsync(string cityId);
+        Task<GetAllCitiesQueryResponse> GetAllCitiesAsync();
     }
 }

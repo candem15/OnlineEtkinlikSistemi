@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Repositories;
@@ -21,6 +22,7 @@ namespace OES.API.Persistence
             services.AddDbContext<OESAPIDbContext>(opt =>
             {
                 opt.UseNpgsql(Configuration.ConnectionStringDockerPg);
+                opt.UseLazyLoadingProxies();
             });
 
             services.AddIdentity<AppUser, AppRole>(options =>
@@ -30,7 +32,9 @@ namespace OES.API.Persistence
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
-            }).AddEntityFrameworkStores<OESAPIDbContext>();
+                options.User.RequireUniqueEmail = true; //Unique email adresi ile kayıt sağlar
+            }).AddEntityFrameworkStores<OESAPIDbContext>()
+            .AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider); //Şifre değişikliği için gerekli provider bilgisi eklendi.
 
             services.AddScoped<IEventReadRepository, EventReadRepository>();
             services.AddScoped<IEventWriteRepository, EventWriteRepository>();

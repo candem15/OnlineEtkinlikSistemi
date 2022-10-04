@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Abstractions.Token;
 using OES.API.Application.Dtos;
+using OES.API.Application.Exceptions;
 using OES.API.Domain.Identity;
 using System;
 using System.Collections.Generic;
@@ -34,7 +35,7 @@ namespace OES.API.Persistence.Services
             if (user == null)
                 user = await _userManager.FindByEmailAsync(usernameOrEmail);
             if (user == null)
-                throw new Exception("Hatalı kullanıcı adı/email yada şifre girdiniz. Lütfen tekrar deneyiniz.");
+                throw new WrongUsernameOrEmailException();
             SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
 
             if (result.Succeeded)
@@ -43,7 +44,7 @@ namespace OES.API.Persistence.Services
                 return token;
             }
 
-            throw new Exception("Kimlik doğrulama hatası. Lütfen tekrar deneyiniz.");
+            throw new WrongPasswordException();
         }
 
     }

@@ -57,7 +57,7 @@ namespace OES.API.Infrastructure.Services.Token
                 claims: claims
                 );
 
-            //Token oluşturucu sınıfından bir örnek alalım.
+            //Token oluşturucu sınıfından bir örnek alıp içine konfigure ettiğimiz token'ı yazıyoruz.
             JwtSecurityTokenHandler tokenHandler = new();
             token.AccessToken = tokenHandler.WriteToken(jwtSecurityToken);
 

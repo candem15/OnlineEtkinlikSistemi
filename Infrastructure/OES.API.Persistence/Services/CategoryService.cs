@@ -2,6 +2,7 @@
 using OES.API.Application.Features.Commands.Category.CreateCategory;
 using OES.API.Application.Features.Commands.Category.DeleteCategory;
 using OES.API.Application.Features.Commands.Category.UpdateCategory;
+using OES.API.Application.Features.Queries.Category.GetAllCategories;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
 using System;
@@ -44,6 +45,12 @@ namespace OES.API.Persistence.Services
             await _categoryWriteRepository.RemoveAsync(categoryId);
             await _categoryWriteRepository.SaveChangesAsync();
             return new DeleteCategoryCommandResponse { Message = $"{categoryToDelete.CategoryName} isimli kategori başarıyla silinmiştir!", Succeeded = true };
+        }
+
+        public async Task<GetAllCategoriesQueryResponse> GetAllAsync()
+        {
+            List<Category> categories = _categoryReadRepository.GetAll().ToList();
+            return new GetAllCategoriesQueryResponse() { Categories = categories };
         }
 
         public async Task<UpdateCategoryCommandResponse> UpdateAsync(Category category)

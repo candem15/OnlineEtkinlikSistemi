@@ -1,4 +1,5 @@
-﻿using OES.API.Application.Repositories;
+﻿using Microsoft.EntityFrameworkCore;
+using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
 using OES.API.Persistence.Contexts;
 using System;

@@ -22,8 +22,4 @@
     <ProjectReference Include="..\OES.API.Domain\OES.API.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Queries\" />
-  </ItemGroup>
-
 </Project>

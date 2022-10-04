@@ -18,6 +18,7 @@ namespace OES.API.Persistence.Repositories
         public ReadRepository(OESAPIDbContext dbContext)
         {
             _dbContext = dbContext;
+            _dbContext.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public DbSet<T> Table => _dbContext.Set<T>();

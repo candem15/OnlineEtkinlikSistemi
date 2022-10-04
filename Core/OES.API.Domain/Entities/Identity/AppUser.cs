@@ -11,6 +11,7 @@ namespace OES.API.Domain.Identity
     public class AppUser : IdentityUser<string>
     {
         public string Name { get; set; }
+        public string? Surname { get; set; }
         public ICollection<Event>? Events { get; set; }
         public string? WebAddressUrl { get; set; }
     }

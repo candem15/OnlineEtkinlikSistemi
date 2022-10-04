@@ -1,4 +1,5 @@
 ﻿using OES.API.Domain.Entities.Common;
+using OES.API.Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;

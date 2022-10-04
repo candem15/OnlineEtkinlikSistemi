@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.City.CreateCity;
 using OES.API.Application.Features.Commands.City.DeleteCity;
 using OES.API.Application.Features.Commands.City.UpdateCity;
+using OES.API.Application.Features.Queries.City.GetAllCities;
 
 namespace OES.API.WebApi.Controllers
 {
@@ -18,7 +19,7 @@ namespace OES.API.WebApi.Controllers
             _mediatR = mediator;
         }
 
-        [HttpPost("create-category")]
+        [HttpPost("create-city")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Admin")]
         public async Task<IActionResult> CreateCity(CreateCityCommandRequest createCityCommandRequest)
         {
@@ -26,7 +27,7 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost("update-category")]
+        [HttpPost("update-city")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Admin")]
         public async Task<IActionResult> UpdateCity(UpdateCityCommandRequest updateCityCommandRequest)
         {
@@ -34,11 +35,18 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("delete-category")]
+        [HttpDelete("delete-city")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Admin")]
         public async Task<IActionResult> DeleteCity(DeleteCityCommandRequest deleteCityCommandRequest)
         {
             DeleteCityCommandResponse response = await _mediatR.Send(deleteCityCommandRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("get-all-cities")]
+        public async Task<IActionResult> GetAllCities([FromQuery]GetAllCitiesQueryRequest getAllCitiesQueryRequest)
+        {
+            GetAllCitiesQueryResponse response = await _mediatR.Send(getAllCitiesQueryRequest);
             return Ok(response);
         }
     }
