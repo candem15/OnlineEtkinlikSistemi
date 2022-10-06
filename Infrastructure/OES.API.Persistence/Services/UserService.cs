@@ -32,15 +32,16 @@ namespace OES.API.Persistence.Services
 
             createUser.Id = Guid.NewGuid().ToString();
             IdentityResult result = await _userManager.CreateAsync(createUser, user.Password);
-            if (createUser.WebAddressUrl != null)
-                await _userManager.AddToRoleAsync(createUser, "Firma");
-            else
-                await _userManager.AddToRoleAsync(createUser, "Basit");
 
             CreateUserResponse response = new() { Succeeded = result.Succeeded };
-
+            if (createUser.WebAddressUrl != null && createUser.Surname != null)
+                response.Succeeded = false;
             if (result.Succeeded)
             {
+                if (createUser.WebAddressUrl != null)
+                    await _userManager.AddToRoleAsync(createUser, "Firma");
+                else
+                    await _userManager.AddToRoleAsync(createUser, "Basit");
                 response.Message = "Kullanıcı başarıyla oluşturulmuştur!";
                 return response;
             }
@@ -57,7 +58,7 @@ namespace OES.API.Persistence.Services
                         response.Message += "Şifreniz en az 8 karakterden oluşmalıdır. \n";
                 }
             if (response.Message == null)
-                 response.Message = "Bilinmeyen bir nedenden ötürü kullanıcı oluşturma işlemi başarısız oldu. \n";
+                response.Message = "Bilinmeyen bir nedenden ötürü kullanıcı oluşturma işlemi başarısız oldu. \n";
 
             return response;
         }

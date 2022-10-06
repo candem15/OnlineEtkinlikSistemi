@@ -2,6 +2,6 @@
 {
     public class GetAllUnconfirmedEventsQueryResponse
     {
-        public List<Domain.Entities.Event> Events { get; set; }
+        public List<Dtos.Event.UnconfirmedEventsResponse> Events { get; set; }
     }
 }

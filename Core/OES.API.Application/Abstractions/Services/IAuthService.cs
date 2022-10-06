@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OES.API.Application.Features.Commands.AppUser.LoginUser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,6 @@ namespace OES.API.Application.Abstractions.Services
 {
     public interface IAuthService
     {
-        Task<Dtos.Token> LoginAsync(string usernameOrEmail, string password);
+        Task<LoginUserCommandResponse> LoginAsync(LoginUserCommandRequest request);
     }
 }

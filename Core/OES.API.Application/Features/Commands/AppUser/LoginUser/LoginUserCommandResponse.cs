@@ -5,5 +5,6 @@ namespace OES.API.Application.Features.Commands.AppUser.LoginUser
     public class LoginUserCommandResponse
     {
         public Token Token { get; set; }
+        public string? UserRole { get; set; }
     }
 }

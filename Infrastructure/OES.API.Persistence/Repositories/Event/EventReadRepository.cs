@@ -14,6 +14,7 @@ namespace OES.API.Persistence.Repositories
     {
         public EventReadRepository(OESAPIDbContext dbContext) : base(dbContext)
         {
+            
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OES.API.Domain.Entities
@@ -12,6 +13,7 @@ namespace OES.API.Domain.Entities
     {
         public Guid EventId { get; set; }
         public double TicketPrice { get; set; }
-        public Event Event { get; set; }
+        [JsonIgnore]
+        public virtual Event Event { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OES.API.Domain.Identity
@@ -12,7 +13,8 @@ namespace OES.API.Domain.Identity
     {
         public string Name { get; set; }
         public string? Surname { get; set; }
-        public ICollection<Event>? Events { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Event>? Events { get; set; }
         public string? WebAddressUrl { get; set; }
     }
 }

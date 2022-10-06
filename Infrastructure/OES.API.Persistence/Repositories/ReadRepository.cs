@@ -45,5 +45,10 @@ namespace OES.API.Persistence.Repositories
             var query = Table.AsQueryable();
             return query.Where(method);
         }
+
+        public void EnableLazyLoading()
+        {
+            _dbContext.ChangeTracker.LazyLoadingEnabled = true;
+        }
     }
 }

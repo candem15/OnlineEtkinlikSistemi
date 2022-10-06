@@ -1,4 +1,5 @@
-﻿using OES.API.Domain.Entities.Common;
+﻿using Newtonsoft.Json;
+using OES.API.Domain.Entities.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,7 +12,8 @@ namespace OES.API.Domain.Entities
     public class Category : BaseEntity
     {
         public string CategoryName { get; set; }
-        public ICollection<Event>? Events { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Event>? Events { get; set; }
         [NotMapped]
         public override DateTime UpdatedDate { get => base.UpdatedDate; set => base.UpdatedDate = value; }
         [NotMapped]

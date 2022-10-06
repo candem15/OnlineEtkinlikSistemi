@@ -1,4 +1,6 @@
-﻿using OES.API.Application.Abstractions.Services;
+﻿using AutoMapper;
+using OES.API.Application.Abstractions.Services;
+using OES.API.Application.Dtos.Event;
 using OES.API.Application.Features.Commands.Event.CreateEvent;
 using OES.API.Application.Features.Commands.Event.DeleteEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
@@ -23,7 +25,8 @@ namespace OES.API.Persistence.Services
         private ICityReadRepository _cityReadRepository;
         private IQuotaReadRepository _quotaReadRepository;
         private IQuotaWriteRepository _quotaWriteRepository;
-        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository)
+        private IMapper _mapper;
+        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper)
         {
             _eventReadRepository = eventReadRepository;
             _eventWriteRepository = eventWriteRepository;
@@ -31,6 +34,7 @@ namespace OES.API.Persistence.Services
             _cityReadRepository = cityReadRepository;
             _quotaReadRepository = quotaReadRepository;
             _quotaWriteRepository = quotaWriteRepository;
+            _mapper = mapper;
         }
         public async Task<CreateEventCommandResponse> CreateAsync(CreateEventCommandRequest createEvent)
         {
@@ -93,9 +97,10 @@ namespace OES.API.Persistence.Services
 
         public async Task<GetAllUnconfirmedEventsQueryResponse> GetAllUnconfirmedEvents(GetAllUnconfirmedEventsQueryRequest events)
         {
+            _eventReadRepository.EnableLazyLoading();
             List<Event> unconfirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == false).ToList();
-
-            return new GetAllUnconfirmedEventsQueryResponse() { Events = unconfirmedEvents };
+            
+            return new GetAllUnconfirmedEventsQueryResponse() { Events = _mapper.Map<List<UnconfirmedEventsResponse>>(unconfirmedEvents) };
         }
 
         public async Task<GetAllConfirmedEventsQueryResponse> GetAllConfirmedEvents(GetAllConfirmedEventsQueryRequest events)

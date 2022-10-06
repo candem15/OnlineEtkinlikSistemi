@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OES.API.Application.Dtos;
+using OES.API.Application.Dtos.Event;
 using OES.API.Application.Dtos.User;
 using OES.API.Application.Features.Commands.AppUser.CreateUser;
 using OES.API.Application.Features.Commands.AppUser.LoginUser;
@@ -59,6 +60,18 @@ namespace OES.API.Application.Mapping
                .ReverseMap();
 
             //Event mappings
+            CreateMap<Event, UnconfirmedEventsResponse>()
+               .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
+               .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.CityName))
+               .ForMember(dest => dest.Quota, opt => opt.MapFrom(src => src.Quota.MaxParticipantsNumber))
+               .ForMember(dest => dest.EventConfirmation, opt => opt.MapFrom(src => src.EventConfirmation))
+               .ForMember(dest => dest.TicketPrice, opt => opt.MapFrom(src => src.Ticket.TicketPrice))
+               .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+               .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+               .ForMember(dest => dest.ApplicationDeadline, opt => opt.MapFrom(src => src.ApplicationDeadline))
+               .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate))
+               .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.EventName))
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
         }
     }
 }

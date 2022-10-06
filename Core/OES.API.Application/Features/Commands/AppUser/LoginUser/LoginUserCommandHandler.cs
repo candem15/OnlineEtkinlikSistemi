@@ -22,7 +22,7 @@ namespace OES.API.Application.Features.Commands.AppUser.LoginUser
 
         public async Task<LoginUserCommandResponse> Handle(LoginUserCommandRequest request, CancellationToken cancellationToken)
         {
-            var token = await _authService.LoginAsync(request.UsernameOrEmail, request.Password);
+            var token = await _authService.LoginAsync(request);
             return _mapper.Map<LoginUserCommandResponse>(token);
         }
     }

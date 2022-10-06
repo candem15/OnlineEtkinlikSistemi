@@ -4,6 +4,7 @@ using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Abstractions.Token;
 using OES.API.Application.Dtos;
 using OES.API.Application.Exceptions;
+using OES.API.Application.Features.Commands.AppUser.LoginUser;
 using OES.API.Domain.Identity;
 using System;
 using System.Collections.Generic;
@@ -29,19 +30,20 @@ namespace OES.API.Persistence.Services
             _signInManager = signInManager;
             _userService = userService;
         }
-        public async Task<Token> LoginAsync(string usernameOrEmail, string password)
+        public async Task<LoginUserCommandResponse> LoginAsync(LoginUserCommandRequest request)
         {
-            AppUser user = await _userManager.FindByNameAsync(usernameOrEmail);
+            AppUser user = await _userManager.FindByNameAsync(request.UsernameOrEmail);
             if (user == null)
-                user = await _userManager.FindByEmailAsync(usernameOrEmail);
+                user = await _userManager.FindByEmailAsync(request.UsernameOrEmail);
             if (user == null)
                 throw new WrongUsernameOrEmailException();
-            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, password, false);
+            SignInResult result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
             if (result.Succeeded)
             {
+                var role = await _userManager.GetRolesAsync(user);
                 Token token = await _tokenHandler.CreateAccessToken(10, user);
-                return token;
+                return new LoginUserCommandResponse() { Token = token, UserRole = role[0] };
             }
 
             throw new WrongPasswordException();
