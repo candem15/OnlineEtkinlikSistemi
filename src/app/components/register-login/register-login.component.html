@@ -1,0 +1,157 @@
+<div class="row" id="lr-container">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="lr-title">
+      <h1 style="font-size: 32px; font-family: arial;">Hoşgeldiniz,</h1>
+      <h3 style="font-family: arial !important;">Online Etkinlik Sistemini kullanmak için lütfen kayıt olun veya giriş
+        yapın!</h3>
+    </div>
+    <!-- Pills navs -->
+    <ul class="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" (click)="switchTabs('login')" role="tab"
+          aria-controls="pills-login" aria-selected="true">GİRİŞ Yap</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="tab-register" data-mdb-toggle="pill" (click)="switchTabs('register')" role="tab"
+          aria-controls="pills-register" aria-selected="false">Kayıt Ol</a>
+      </li>
+    </ul>
+    <!-- Pills navs -->
+
+    <!-- Pills content -->
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+        <form [formGroup]="frmLogin" (ngSubmit)="onLoginSubmit(frmLogin.value)">
+          <div class="text-center mb-3">
+            <br>
+          </div>
+
+          <!-- Email input -->
+          <div class="form-outline mb-5">
+            <input formControlName="usernameOrEmail" type="text" id="loginName" class="form-control" />
+            <label class="form-label" for="loginName">Kullanıcı adı veya E-Mail</label>
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-4">
+            <input formControlName="password" type="password" id="loginPassword" class="form-control" />
+            <label class="form-label" for="loginPassword">Şifre</label>
+          </div>
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary btn-block mb-4">Giriş yap</button>
+
+        </form>
+      </div>
+      <div class="tab-pane fade" id="pills-register" role="tabpanel" aria-labelledby="tab-register">
+        <form [formGroup]="frmRegister" (ngSubmit)="onRegisterSubmit(frmRegister.value)">
+          <div class="text-center mb-3">
+          </div>
+          <!-- User type toggle switch -->
+          <ul class="nav nav-pills navbar-expand-sm mb-6" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="tab-basic" data-mdb-toggle="pill" (click)="userRegisterType('basic')" role="tab"
+                aria-controls="pills-basic" aria-selected="true">Bireysel</a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="tab-company" data-mdb-toggle="pill" (click)="userRegisterType('company')" role="tab"
+                aria-controls="pills-company" aria-selected="false">Firma</a>
+            </li>
+          </ul>
+          <!-- Name input -->
+          <div class="form-outline mb-6">
+            <input formControlName="name" type="text" id="registerName" class="form-control"
+              [ngClass]="{'is-invalid': registerSubmitted && componentRegister.name.errors}" />
+            <label class="form-label" for="registerName">Ad</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.name.errors?.required && (componentRegister.name.touched || registerSubmitted)">
+              Lütfen adınızı giriniz!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="(componentRegister.name.errors?.minlength || componentRegister.name.errors?.maxlength) && (componentRegister.name.touched || registerSubmitted)">
+              Adınız 3 karakterden kısa olamaz!</small>
+          </div>
+
+          <!-- Surname input -->
+          <div class="form-outline mb-6" id="surnameSection">
+            <input formControlName="surname" type="text" id="registerSurname" class="form-control"
+              [ngClass]="{'is-invalid': registerSubmitted && componentRegister.surname.errors}" />
+            <label class="form-label" for="registerSurname">Soyad</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.surname.errors?.required && (componentRegister.surname.touched || registerSubmitted)">
+              Lütfen soyadınızı giriniz!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="(componentRegister.surname.errors?.minlength || componentRegister.surname.errors?.maxlength) && (componentRegister.surname.touched || registerSubmitted)">
+              Soyadı 2 karakterden daha kısa olamaz!</small>
+          </div>
+
+          <!-- WebAddressUrl input -->
+          <div class="form-outline mb-6 visually-hidden" id="webAddressSection">
+            <input formControlName="webAddressUrl" type="text" id="registerWebAddressUrl" class="form-control"
+              [ngClass]="{'is-invalid': registerSubmitted && componentRegister.webAddressUrl.errors}" />
+            <label class="form-label" for="registerWebAddressUrl">Web Sitesi</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.webAddressUrl.errors?.required && (componentRegister.webAddressUrl.touched || registerSubmitted)">
+              Lütfen web sitesi adresinizi giriniz!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="(componentRegister.webAddressUrl.errors?.minlength || componentRegister.webAddressUrl.errors?.maxlength) && (componentRegister.webAddressUrl.touched || registerSubmitted)">
+              Lütfen geçerli bir web sitesi adresi giriniz!</small>
+          </div>
+
+          <!-- Username input -->
+          <div class="form-outline mb-6">
+            <input formControlName="username" type="text" id="registerUsername" class="form-control"
+              [ngClass]="{'is-invalid': registerSubmitted && componentRegister.username.errors}" />
+            <label class="form-label" for="registerUsername">Username</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.username.errors?.required && (componentRegister.username.touched || registerSubmitted)">
+              Lütfen kullancı adını giriniz!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="(componentRegister.username.errors?.minlength || componentRegister.username.errors?.maxlength) && (componentRegister.username.touched || registerSubmitted)">
+              Kullanıcı adı 3-50 karakter uzunlukta olmalıdır!</small>
+          </div>
+
+          <!-- Email input -->
+          <div class="form-outline mb-6">
+            <input formControlName="email" type="email" id="registerEmail" class="form-control"
+              [ngClass]="{'is-invalid': registerSubmitted && componentRegister.email.errors}" />
+            <label class="form-label" for="registerEmail">E-Mail</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.email.errors?.required && (componentRegister.email.touched || registerSubmitted)">
+              Lütfen E-Mail alanını boş bırakmayın!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.email.errors?.email && (componentRegister.email.touched|| registerSubmitted)">
+              Lüften geçerli bir E-Mail adresi giriniz!</small>
+          </div>
+
+          <!-- Password input -->
+          <div class="form-outline mb-6">
+            <input formControlName="password" type="password" id="registerPassword" class="form-control"
+              [ngClass]="{'is-invalid': registerSubmitted && componentRegister.password.errors}" />
+            <label class="form-label" for="registerPassword">Şifre</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.password.errors?.required && (componentRegister.password.touched || registerSubmitted)">
+              Lütfen şifreyi boş geçmeyiniz!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="(componentRegister.password.errors?.minlength||componentRegister.password.errors?.maxlength) && (componentRegister.password?.touched || registerSubmitted)">
+              Şifre en az 8 karakterden oluşmalıdır!</small>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.password.errors?.notsame && registerSubmitted">
+              Şifre ve şifre tekrarı aynı olmalıdır!</small>
+          </div>
+
+          <!-- Password Confirm input -->
+          <div class="form-outline mb-6">
+            <input formControlName="passwordConfirm" type="password" id="registerPasswordConfirm"
+              class="form-control" />
+            <label class="form-label" for="registerPasswordConfirm">Şifre Tekrar</label>
+          </div>
+          <br>
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-primary btn-block mb-3">Üye ol</button>
+        </form>
+      </div>
+    </div>
+    <!-- Pills content -->
+  </div>
+  <div class="col-md-4"></div>
+</div>

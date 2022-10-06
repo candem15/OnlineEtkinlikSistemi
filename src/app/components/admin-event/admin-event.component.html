@@ -1,0 +1,57 @@
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource">
+    <ng-container matColumnDef="EventName">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Adı</th>
+      <td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CategoryName">
+      <th mat-header-cell *matHeaderCellDef>Kategori</th>
+      <td mat-cell *matCellDef="let element"> {{element.categoryName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CityName">
+      <th mat-header-cell *matHeaderCellDef>Şehir</th>
+      <td mat-cell *matCellDef="let element"> {{element.cityName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Address">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Adresi</th>
+      <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Description">
+      <th mat-header-cell *matHeaderCellDef>Açıklama</th>
+      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Quota">
+      <th mat-header-cell *matHeaderCellDef>Kontenjan</th>
+      <td mat-cell *matCellDef="let element"> {{element.quota}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TicketPrice">
+      <th mat-header-cell *matHeaderCellDef>Bilet Ücreti</th>
+      <td mat-cell *matCellDef="let element"> {{element.ticketPrice}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="EventDate">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Tarihi</th>
+      <td mat-cell *matCellDef="let element"> {{element.eventDate}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="ApplicationDeadline">
+      <th mat-header-cell *matHeaderCellDef>Son Başvuru Tarihi</th>
+      <td mat-cell *matCellDef="let element"> {{element.applicationDeadline}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="EventConfirmation">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Onayı</th>
+      <td mat-cell *matCellDef="let element"> {{element.eventConfirmation}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
