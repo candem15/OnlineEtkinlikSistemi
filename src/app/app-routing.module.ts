@@ -8,6 +8,10 @@ const routes: Routes = [
       (module => module.AdminEventModule), canActivate: [AuthGuard]
   },
   {
+    path: "admin-category", loadChildren: () => import("./components/admin-category/admin-category.module").then
+      (module => module.AdminCategoryModule), canActivate: [AuthGuard]
+  },
+  {
     path: "register", loadChildren: () => import("./components/register-login/register-login.module").then
       (module => module.RegisterLoginModule)
   }

@@ -14,8 +14,7 @@ export class AppComponent {
   constructor(
     public authService: AuthService,
     private toastrService: CustomToastrService) {
-    const userRole: string = localStorage.getItem("userRole");
-    this.userRoleCheck(userRole);
+    this.userRoleCheck(localStorage.getItem("userRole"));
     this.authService.identityCheck();
   }
 
@@ -40,9 +39,11 @@ export class AppComponent {
     }
     else if (userType == "Admin") {
       $("#admin-event").removeClass("visually-hidden");
+      $("#admin-category").removeClass("visually-hidden");
     }
     else {
       $("#admin-event").addClass("visually-hidden");
+      $("#admin-category").addClass("visually-hidden");
     }
   }
 
