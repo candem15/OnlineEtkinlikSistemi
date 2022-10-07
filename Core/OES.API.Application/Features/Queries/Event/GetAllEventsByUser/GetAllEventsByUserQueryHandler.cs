@@ -14,7 +14,7 @@ namespace OES.API.Application.Features.Queries.Event.GetAllEventsByUser
 
         public async Task<GetAllEventsByUserQueryResponse> Handle(GetAllEventsByUserQueryRequest request, CancellationToken cancellationToken)
         {
-            GetAllEventsByUserQueryResponse response = await _eventService.GetAllEventsByUser(request);
+            GetAllEventsByUserQueryResponse response = await _eventService.GetAllEventsByUserAsync(request);
 
             return response;
         }

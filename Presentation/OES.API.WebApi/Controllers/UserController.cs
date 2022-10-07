@@ -30,18 +30,16 @@ namespace OES.API.WebApi.Controllers
         [Authorize(AuthenticationSchemes = "Default", Roles = "Firma,Basit")]
         public async Task<IActionResult> UpdatePassword(UpdatePasswordCommandRequest updatePasswordCommandRequest)
         {
-            string? userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            updatePasswordCommandRequest.Id = userId;
+            updatePasswordCommandRequest.Id = User.FindFirst("userId")?.Value;
             UpdatePasswordCommandResponse response = await _mediatR.Send(updatePasswordCommandRequest);
             return Ok(response);
         }
 
         [HttpGet("get-user-details")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
-        public async Task<IActionResult> GetUserDetails([FromQuery]GetUserDetailsQueryRequest getUserDetailsQueryRequest)
+        public async Task<IActionResult> GetUserDetails([FromQuery] GetUserDetailsQueryRequest getUserDetailsQueryRequest)
         {
-            string? username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            getUserDetailsQueryRequest.Username = username;
+            getUserDetailsQueryRequest.Id = User.FindFirst("userId")?.Value;
             GetUserDetailsQueryResponse response = await _mediatR.Send(getUserDetailsQueryRequest);
             return Ok(response);
         }

@@ -1,7 +1,9 @@
-﻿namespace OES.API.Application.Features.Queries.Category.GetAllCategories
+﻿using OES.API.Application.Dtos.Category;
+
+namespace OES.API.Application.Features.Queries.Category.GetAllCategories
 {
     public class GetAllCategoriesQueryResponse
     {
-        public List<Domain.Entities.Category> Categories { get; set; }
+        public List<GetAllCategoriesResponse> Categories { get; set; }
     }
 }

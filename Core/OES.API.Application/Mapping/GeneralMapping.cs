@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using OES.API.Application.Dtos;
+using OES.API.Application.Dtos.Category;
 using OES.API.Application.Dtos.Event;
 using OES.API.Application.Dtos.User;
 using OES.API.Application.Features.Commands.AppUser.CreateUser;
@@ -58,6 +59,9 @@ namespace OES.API.Application.Mapping
                .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                .ReverseMap();
+            CreateMap<Category, GetAllCategoriesResponse>()
+              .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.CategoryName))
+              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             //Event mappings
             CreateMap<Event, UnconfirmedEventsResponse>()

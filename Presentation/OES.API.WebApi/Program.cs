@@ -1,9 +1,11 @@
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using OES.API.Application;
 using OES.API.Infrastructure;
 using OES.API.Persistence;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 
@@ -13,7 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
-builder.Services.AddControllers().AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore); ;
+builder.Services.AddControllers()
+    .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
+    .AddFluentValidation(opt =>
+    {
+        opt.RegisterValidatorsFromAssemblyContaining(typeof(Program));
+    });
 
 builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
     policy.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod()

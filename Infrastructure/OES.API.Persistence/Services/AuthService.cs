@@ -42,7 +42,7 @@ namespace OES.API.Persistence.Services
             if (result.Succeeded)
             {
                 var role = await _userManager.GetRolesAsync(user);
-                Token token = await _tokenHandler.CreateAccessToken(10, user);
+                Token token = await _tokenHandler.CreateAccessToken(30, user);
                 return new LoginUserCommandResponse() { Token = token, UserRole = role[0] };
             }
 

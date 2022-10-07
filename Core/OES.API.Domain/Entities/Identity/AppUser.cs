@@ -13,8 +13,10 @@ namespace OES.API.Domain.Identity
     {
         public string Name { get; set; }
         public string? Surname { get; set; }
+        public string? WebAddressUrl { get; set; }
         [JsonIgnore]
         public virtual ICollection<Event>? Events { get; set; }
-        public string? WebAddressUrl { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<Event>? Organizations { get; set; }
     }
 }

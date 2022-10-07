@@ -15,8 +15,8 @@ namespace OES.API.Persistence.Contexts
     public class OESAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public OESAPIDbContext(DbContextOptions options) : base(options)
-        { 
-            
+        {
+
         }
 
         public DbSet<Category> Categories { get; set; }
@@ -27,6 +27,11 @@ namespace OES.API.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.Entity<Event>()
+                .HasOne(p => p.Organizer)
+                .WithMany(e => e.Organizations)
+                .HasForeignKey(k => k.OrganizerId);
+
             base.OnModelCreating(builder);
 
             builder.Entity<AppRole>().HasData(new AppRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7210", Name = "Admin", NormalizedName = "ADMIN".ToUpper() });
@@ -56,7 +61,7 @@ namespace OES.API.Persistence.Contexts
             );
 
         }
-        
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             //ChangeTracker : Entityler üzerinden yapılan değişiklerin ya da yeni eklenen verinin yakalanmasını sağlayan propertydir. Bu metotda SaveChangesAsync override edilerek entitynin ilgili propertylerine atama gerçekleştirilerek bir Interceptor(kesme-araya girme) inşa edildi.

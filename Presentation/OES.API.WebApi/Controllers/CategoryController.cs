@@ -35,9 +35,9 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("delete-category")]
+        [HttpDelete("delete-category/{id}")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Admin")]
-        public async Task<IActionResult> DeleteCategory(DeleteCategoryCommandRequest deleteCategoryCommandRequest)
+        public async Task<IActionResult> DeleteCategory([FromRoute]DeleteCategoryCommandRequest deleteCategoryCommandRequest)
         {
             DeleteCategoryCommandResponse response = await _mediatR.Send(deleteCategoryCommandRequest);
             return Ok(response);

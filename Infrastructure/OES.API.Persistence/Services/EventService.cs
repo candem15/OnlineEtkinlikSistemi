@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Dtos.Event;
+using OES.API.Application.Features.Commands.Event.ConfirmEvent;
 using OES.API.Application.Features.Commands.Event.CreateEvent;
 using OES.API.Application.Features.Commands.Event.DeleteEvent;
+using OES.API.Application.Features.Commands.Event.RejectEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
@@ -38,10 +40,11 @@ namespace OES.API.Persistence.Services
         }
         public async Task<CreateEventCommandResponse> CreateAsync(CreateEventCommandRequest createEvent)
         {
-            Guid eventId = Guid.NewGuid();
+            Guid newId = Guid.NewGuid();
             Event newEvent = new Event()
             {
-                Id = eventId,
+                Id = newId,
+                OrganizerId = createEvent.Id,
                 EventDate = createEvent.EventDate,
                 EventConfirmation = false,
                 EventName = createEvent.EventName,
@@ -50,8 +53,8 @@ namespace OES.API.Persistence.Services
                 Description = createEvent.Description,
                 City = await _cityReadRepository.GetByIdAsync(createEvent.CityId),
                 Category = await _categoryReadRepository.GetByIdAsync(createEvent.CategoryId),
-                Ticket = createEvent.TicketPrice != null ? new Ticket() { EventId = eventId, TicketPrice = (double)createEvent.TicketPrice } : null,
-                Quota = new Quota() { EventId = eventId, MaxParticipantsNumber = (int)createEvent.MaxParticipantsNumber, NumberOfParticipants = 0 }
+                Ticket = createEvent.TicketPrice != null ? new Ticket() { EventId = newId, TicketPrice = (double)createEvent.TicketPrice } : null,
+                Quota = new Quota() { EventId = newId, MaxParticipantsNumber = (int)createEvent.MaxParticipantsNumber, NumberOfParticipants = 0 }
             };
             await _eventWriteRepository.AddAsync(newEvent);
             await _eventWriteRepository.SaveChangesAsync();
@@ -95,24 +98,49 @@ namespace OES.API.Persistence.Services
             return new DeleteEventCommandResponse() { Message = "Etkinlik başarıyla silinmiştir!", Succeeded = true };
         }
 
-        public async Task<GetAllUnconfirmedEventsQueryResponse> GetAllUnconfirmedEvents(GetAllUnconfirmedEventsQueryRequest events)
+        public async Task<GetAllUnconfirmedEventsQueryResponse> GetAllUnconfirmedEventsAsync(GetAllUnconfirmedEventsQueryRequest events)
         {
             _eventReadRepository.EnableLazyLoading();
             List<Event> unconfirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == false).ToList();
-            
+
             return new GetAllUnconfirmedEventsQueryResponse() { Events = _mapper.Map<List<UnconfirmedEventsResponse>>(unconfirmedEvents) };
         }
 
-        public async Task<GetAllConfirmedEventsQueryResponse> GetAllConfirmedEvents(GetAllConfirmedEventsQueryRequest events)
+        public async Task<GetAllConfirmedEventsQueryResponse> GetAllConfirmedEventsAsync(GetAllConfirmedEventsQueryRequest events)
         {
             List<Event> confirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == true).ToList();
 
             return new GetAllConfirmedEventsQueryResponse() { Events = confirmedEvents };
         }
 
-        public async Task<GetAllEventsByUserQueryResponse> GetAllEventsByUser(GetAllEventsByUserQueryRequest userMail)
+        public async Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail)
         {
             return null;
+        }
+
+        public async Task<ConfirmEventCommandResponse> ConfirmEventAsync(ConfirmEventCommandRequest confirmEvent)
+        {
+            Event eventToUpdate = await _eventReadRepository.GetByIdAsync(confirmEvent.Id);
+            if (eventToUpdate == null)
+                return new ConfirmEventCommandResponse { Message = "Onaylanmak istenen etkinlik bulunumadı!", Succeeded = false };
+
+            eventToUpdate.EventConfirmation = true;
+            _eventWriteRepository.Update(eventToUpdate);
+            await _eventWriteRepository.SaveChangesAsync();
+
+            return new ConfirmEventCommandResponse() { Message = "Etkinlik başarıyla onaylanmıştır!", Succeeded = true };
+        }
+
+        public async Task<RejectEventCommandResponse> RejectEventAsync(RejectEventCommandRequest rejectEvent)
+        {
+            Event eventToReject = await _eventReadRepository.GetByIdAsync(rejectEvent.Id);
+            if (eventToReject == null)
+                return new RejectEventCommandResponse { Message = "Reddedilmek istenen etkinlik bulunumadı!", Succeeded = false };
+            
+            await _eventWriteRepository.RemoveAsync(rejectEvent.Id);
+            await _eventWriteRepository.SaveChangesAsync();
+
+            return new RejectEventCommandResponse() { Message = "Etkinlik başarıyla reddedilmiştir!", Succeeded = true };
         }
     }
 }

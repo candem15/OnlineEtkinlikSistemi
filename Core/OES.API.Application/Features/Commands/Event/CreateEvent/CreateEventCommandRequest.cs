@@ -9,6 +9,7 @@ namespace OES.API.Application.Features.Commands.Event.CreateEvent
 {
     public class CreateEventCommandRequest : IRequest<CreateEventCommandResponse>
     {
+        public string? Id { get; set; }
         public string EventName { get; set; }
         public string Address { get; set; }
         public DateTime ApplicationDeadline { get; set; }

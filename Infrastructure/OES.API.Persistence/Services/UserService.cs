@@ -65,7 +65,7 @@ namespace OES.API.Persistence.Services
 
         public async Task<GetUserDetailsQueryResponse> GetUserDetailsAsync(GetUserDetailsQueryRequest userDetails)
         {
-            AppUser user = await _userManager.FindByEmailAsync(userDetails.Username);
+            AppUser user = await _userManager.FindByIdAsync(userDetails.Id);
             if (user == null)
                 throw new NotFoundUserException();
             return new GetUserDetailsQueryResponse()
@@ -78,7 +78,7 @@ namespace OES.API.Persistence.Services
 
         public async Task<UpdatePasswordCommandResponse> UpdatePasswordAsync(UpdatePasswordCommandRequest updatePassword)
         {
-            var user = await _userManager.FindByEmailAsync(updatePassword.Id);
+            var user = await _userManager.FindByIdAsync(updatePassword.Id);
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             var result = await _userManager.ResetPasswordAsync(user, token, updatePassword.Password);
             if (result.Succeeded)

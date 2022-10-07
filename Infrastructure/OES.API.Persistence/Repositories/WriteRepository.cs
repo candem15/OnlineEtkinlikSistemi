@@ -18,6 +18,7 @@ namespace OES.API.Persistence.Repositories
         public WriteRepository(OESAPIDbContext dbContext)
         {
             _dbContext = dbContext;
+            _dbContext.ChangeTracker.LazyLoadingEnabled = false;
         }
 
         public DbSet<T> Table => _dbContext.Set<T>();
@@ -60,6 +61,11 @@ namespace OES.API.Persistence.Repositories
         {
             EntityEntry entityEntry = Table.Update(model);
             return entityEntry.State == EntityState.Modified;
+        }
+
+        public void EnableLazyLoading()
+        {
+            _dbContext.ChangeTracker.LazyLoadingEnabled = true;
         }
     }
 }

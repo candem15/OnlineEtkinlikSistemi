@@ -38,9 +38,9 @@ namespace OES.API.Infrastructure.Services.Token
             //Oluşturulacak token ın rol atamasını gerçekleştiriyoruz.
             var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                //new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userId", user.Id)
             };
 
             var roles = await _userManager.GetRolesAsync(user);

@@ -1,5 +1,8 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using OES.API.Application.Validators;
+using OES.API.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +18,10 @@ namespace OES.API.Application
             services.AddMediatR(typeof(ServiceRegistration));
             services.AddAutoMapper(typeof(ServiceRegistration));
             services.AddHttpClient();
+
+            //Validators
+
+            services.AddScoped<IValidator<Category>, CategoryValidator>();
         }
     }
 }

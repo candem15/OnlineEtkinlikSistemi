@@ -19,7 +19,7 @@ namespace OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents
 
         public async Task<GetAllUnconfirmedEventsQueryResponse> Handle(GetAllUnconfirmedEventsQueryRequest request, CancellationToken cancellationToken)
         {
-            GetAllUnconfirmedEventsQueryResponse response = await _eventService.GetAllUnconfirmedEvents(request);
+            GetAllUnconfirmedEventsQueryResponse response = await _eventService.GetAllUnconfirmedEventsAsync(request);
 
             return response;
         }
