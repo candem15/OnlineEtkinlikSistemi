@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using OES.API.Application.Validators;
 using OES.API.Domain.Entities;
+using OES.API.Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,8 @@ namespace OES.API.Application
             //Validators
 
             services.AddScoped<IValidator<Category>, CategoryValidator>();
+            services.AddScoped<IValidator<City>, CityValidator>();
+            services.AddScoped<IValidator<AppUser>, AppUserValidator>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using OES.API.Application.Dtos;
 using OES.API.Application.Dtos.Category;
+using OES.API.Application.Dtos.City;
 using OES.API.Application.Dtos.Event;
 using OES.API.Application.Dtos.User;
 using OES.API.Application.Features.Commands.AppUser.CreateUser;
@@ -44,6 +45,9 @@ namespace OES.API.Application.Mapping
                .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.CityName))
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                .ReverseMap();
+            CreateMap<City, GetAllCitiesResponse>()
+             .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.CityName))
+             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
 
             //Auth mappings
             CreateMap<LoginUserCommandResponse, Token>()

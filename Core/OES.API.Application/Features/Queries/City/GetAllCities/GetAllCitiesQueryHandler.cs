@@ -19,7 +19,7 @@ namespace OES.API.Application.Features.Queries.City.GetAllCities
 
         public async Task<GetAllCitiesQueryResponse> Handle(GetAllCitiesQueryRequest request, CancellationToken cancellationToken)
         {
-            return await _cityService.GetAllCitiesAsync();
+            return await _cityService.GetAllAsync();
         }
     }
 }

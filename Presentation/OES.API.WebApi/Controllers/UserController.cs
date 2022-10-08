@@ -36,7 +36,7 @@ namespace OES.API.WebApi.Controllers
         }
 
         [HttpGet("get-user-details")]
-        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit,Admin,Firma")]
         public async Task<IActionResult> GetUserDetails([FromQuery] GetUserDetailsQueryRequest getUserDetailsQueryRequest)
         {
             getUserDetailsQueryRequest.Id = User.FindFirst("userId")?.Value;

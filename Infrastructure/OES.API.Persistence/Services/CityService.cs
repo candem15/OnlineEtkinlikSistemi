@@ -1,4 +1,6 @@
-﻿using OES.API.Application.Abstractions.Services;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Features.Commands.City.CreateCity;
 using OES.API.Application.Features.Commands.City.DeleteCity;
 using OES.API.Application.Features.Commands.City.UpdateCity;
@@ -17,14 +19,21 @@ namespace OES.API.Persistence.Services
     {
         private ICityWriteRepository _cityWriteRepository;
         private ICityReadRepository _cityReadRepository;
-        public CityService(ICityWriteRepository cityWriteRepository, ICityReadRepository cityReadRepository)
+        private IValidator<City> _validator;
+        public CityService(ICityWriteRepository cityWriteRepository, ICityReadRepository cityReadRepository, IValidator<City> validator)
         {
             _cityWriteRepository = cityWriteRepository;
             _cityReadRepository = cityReadRepository;
+            _validator = validator;
         }
 
         public async Task<CreateCityCommandResponse> CreateAsync(City city)
         {
+            ValidationResult result = await _validator.ValidateAsync(city);
+            if (!result.IsValid)
+            {
+                return new CreateCityCommandResponse() { Message = "Şehir ismi boş geçilemez!", Succeeded = false };
+            }
             bool cityExists = _cityReadRepository.GetWhere(x => x.CityName == city.CityName).Any();
             if (cityExists)
             {
@@ -64,7 +73,7 @@ namespace OES.API.Persistence.Services
             return new DeleteCityCommandResponse { Message = $"{cityToDelete.CityName} isimli şehir başarıyla silinmiştir!", Succeeded = true };
         }
 
-        public async Task<GetAllCitiesQueryResponse> GetAllCitiesAsync()
+        public async Task<GetAllCitiesQueryResponse> GetAllAsync()
         {
             List<City> cities = _cityReadRepository.GetAll().ToList();
 

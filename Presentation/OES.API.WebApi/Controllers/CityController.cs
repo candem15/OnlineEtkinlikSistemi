@@ -35,9 +35,9 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpDelete("delete-city")]
+        [HttpDelete("delete-city/{id}")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Admin")]
-        public async Task<IActionResult> DeleteCity(DeleteCityCommandRequest deleteCityCommandRequest)
+        public async Task<IActionResult> DeleteCity([FromRoute]DeleteCityCommandRequest deleteCityCommandRequest)
         {
             DeleteCityCommandResponse response = await _mediatR.Send(deleteCityCommandRequest);
             return Ok(response);

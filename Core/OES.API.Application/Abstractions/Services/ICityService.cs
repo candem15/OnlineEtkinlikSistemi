@@ -16,6 +16,6 @@ namespace OES.API.Application.Abstractions.Services
         Task<CreateCityCommandResponse> CreateAsync(City city);
         Task<UpdateCityCommandResponse> UpdateAsync(City city);
         Task<DeleteCityCommandResponse> DeleteAsync(string cityId);
-        Task<GetAllCitiesQueryResponse> GetAllCitiesAsync();
+        Task<GetAllCitiesQueryResponse> GetAllAsync();
     }
 }

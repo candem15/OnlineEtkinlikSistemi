@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Dtos.User;
@@ -18,19 +20,23 @@ namespace OES.API.Persistence.Services
     {
         readonly UserManager<AppUser> _userManager;
         readonly IMapper _mapper;
+        readonly IValidator<AppUser> _validator;
 
-        public UserService(UserManager<AppUser> userManager, IMapper mapper)
+        public UserService(UserManager<AppUser> userManager, IMapper mapper, IValidator<AppUser> validator)
         {
             _userManager = userManager;
             _mapper = mapper;
+            _validator = validator;
         }
 
 
         public async Task<CreateUserResponse> CreateAsync(CreateUser user)
         {
             AppUser createUser = _mapper.Map<AppUser>(user);
-
-            createUser.Id = Guid.NewGuid().ToString();
+            ValidationResult validationResult = await _validator.ValidateAsync(createUser);
+            if (!validationResult.IsValid)
+                return new CreateUserResponse() { Message = "Hatalı kullanıcı oluşturma bilgileri girdiniz!", Succeeded = false };
+                createUser.Id = Guid.NewGuid().ToString();
             IdentityResult result = await _userManager.CreateAsync(createUser, user.Password);
 
             CreateUserResponse response = new() { Succeeded = result.Succeeded };
@@ -70,9 +76,11 @@ namespace OES.API.Persistence.Services
                 throw new NotFoundUserException();
             return new GetUserDetailsQueryResponse()
             {
+                Username = user.UserName,
                 Email = user.Email,
                 Name = user.Name,
-                Surname = user.Surname
+                Surname = user.Surname,
+                WebAddressUrl = user.WebAddressUrl
             };
         }
 
