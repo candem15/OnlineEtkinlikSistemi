@@ -11,7 +11,7 @@ import { HttpClientService } from './http-client.service';
 })
 export class UserAuthService {
 
-  constructor(private httpClientService: HttpClientService, private toastrService: CustomToastrService, private appComponent:AppComponent) { }
+  constructor(private httpClientService: HttpClientService, private toastrService: CustomToastrService) { }
 
   async login(user: LoginUser, callBackFunction?: () => void) {
     const observable: Observable<any> = this.httpClientService.post({
@@ -23,7 +23,7 @@ export class UserAuthService {
     if (tokenResponse) {
       localStorage.setItem("accessToken", tokenResponse.token.accessToken);
       localStorage.setItem("userRole", tokenResponse.userRole);
-      this.appComponent.userRoleCheck(tokenResponse.userRole);
+      //this.appComponent.userRoleCheck(tokenResponse.userRole);
       this.toastrService.notification(
         "Hoşgeldiniz! Online Etkinlik Sisteminin güzelliklerinin tadını çıkarmaya başlayabilirsiniz <3",
         "Giriş başarılı!",

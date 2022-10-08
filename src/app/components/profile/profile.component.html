@@ -1,0 +1,114 @@
+<div class="container emp-profile">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="profile-head">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="profile-tab" data-toggle="tab" role="tab" aria-controls="home"
+              (click)="toggleToProfile()" aria-selected="true">Profil Bilgileri</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="pass-tab" data-toggle="tab" role="tab" aria-controls="home"
+              (click)="toggleToPasswordChange()" aria-selected="true">Şire Değiştir</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-8" *ngIf="this.toggleTab==true">
+      <div class="tab-content profile-tab" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Kullanıcı Adı</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{user?.username}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Ad</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{user?.name}}</p>
+            </div>
+          </div>
+          <div class="row" *ngIf="authService.isAuthenticated && authService.userRoleCheck=='Basit'">
+            <div class="col-md-6">
+              <label>Soyad</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{user?.surname}}</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <label>E-mail</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{user?.email}}</p>
+            </div>
+          </div>
+          <div class="row" *ngIf="authService.isAuthenticated && authService.userRoleCheck=='Firma'">
+            <div class="col-md-6">
+              <label>Web Sitesi</label>
+            </div>
+            <div class="col-md-6">
+              <p>{{user?.webAddressUrl}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8" *ngIf="this.toggleTab==false">
+      <div class="tab-content profile-tab" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="row">
+            <div class="col-md-6">
+              <label>Yeni şifrenizi giriniz: </label>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="fill" class="input-margin">
+                <input matInput #txtPassword [formControl]="passwordFormControl">
+                <mat-error *ngIf="passwordFormControl.hasError('required')">
+                  Şifre <strong>boş geçilemez!</strong>
+                </mat-error>
+                <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                  Şifre <strong>en az 8 karakter uzunlukta olmalıdır!</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-6">
+              <label>Yeni şifrenizi tekrar giriniz:</label>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field appearance="fill" class="input-margin">
+                <input matInput #txtPasswordRepeat [formControl]="passwordFormControl">
+                <mat-error *ngIf="passwordFormControl.hasError('required')">
+                  Şifre <strong>boş geçilemez!</strong>
+                </mat-error>
+                <mat-error *ngIf="passwordFormControl.hasError('minlength')">
+                  Şifre <strong>en az 8 karakter uzunlukta olmalıdır!</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-md-6">
+              <!-- <label>Soyad</label> -->
+            </div>
+            <div class="col-md-4">
+              <input type="submit" class="profile-edit-btn" name="btnAddMore" value="Şifreyi Değiştir"
+                (click)="updatePassword(txtPassword)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,56 @@
+<div class="mat-elevation-z8">
+  <mat-form-field appearance="fill" class="input-margin">
+    <mat-label>Şehir Adı</mat-label>
+    <input matInput #txtName [formControl]="cityFormControl">
+    <mat-error *ngIf="cityFormControl.hasError('required')">
+      Şehir ismi <strong>boş geçilemez!</strong>
+    </mat-error>
+    <mat-error *ngIf="cityFormControl.hasError('minlength')">
+      Şehir ismi <strong>en az 1 karakter uzunlukta olmalıdır!</strong>
+    </mat-error>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="create(txtName)">Şehir Ekle</button>
+  <br>
+  <mat-form-field appearance="fill" class="input-margin">
+    <mat-label>Yeni Şehir Adı</mat-label>
+    <input matInput #txtNewName [formControl]="cityFormControl">
+    <mat-error *ngIf="cityFormControl.hasError('required')">
+      Şehir ismi <strong>boş geçilemez!</strong>
+    </mat-error>
+    <mat-error *ngIf="cityFormControl.hasError('minlength')">
+      Şehir ismi <strong>en az 1 karakter uzunlukta olmalıdır!</strong>
+    </mat-error>
+  </mat-form-field>
+  <table mat-table [dataSource]="dataSource">
+
+    <ng-container matColumnDef="CityName">
+      <th mat-header-cell *matHeaderCellDef width="120px">Şehir Adı</th>
+      <td mat-cell *matCellDef="let element"> {{element.cityName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Id">
+      <th mat-header-cell *matHeaderCellDef>City Id</th>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="UpdateCity">
+      <th mat-header-cell *matHeaderCellDef width="40px"></th>
+      <td mat-cell *matCellDef="let element"> <button mat-mini-fab title="Sil" color="primary"
+          (click)="updateCity(element.id,txtNewName)">
+          <mat-icon>edit</mat-icon>
+        </button> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="DeleteCity">
+      <th mat-header-cell *matHeaderCellDef width="40px"></th>
+      <td mat-cell *matCellDef="let element"> <button mat-mini-fab title="Sil" color="warn"
+          (click)="deleteCity(element.id)">
+          <mat-icon>delete</mat-icon>
+        </button> </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>

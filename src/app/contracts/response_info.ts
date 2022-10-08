@@ -1,4 +1,4 @@
-export class CreateUser {
+export class ResponseInfo {
   message: string;
   succeeded: boolean;
 }

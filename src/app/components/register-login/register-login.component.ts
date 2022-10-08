@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { CreateUser } from 'src/app/contracts/create_user';
+import { ResponseInfo } from 'src/app/contracts/response_info';
 import { LoginUser } from 'src/app/contracts/login_user';
 import { User } from 'src/app/entities/user';
 import { AuthService } from 'src/app/services/auth.service';
@@ -109,7 +109,7 @@ export class RegisterLoginComponent extends BaseComponent implements OnInit {
     this.registerSubmitted = true;
     if (this.frmRegister.invalid)
       return;
-    const result: CreateUser = await this.userService.create(user);
+    const result: ResponseInfo = await this.userService.create(user);
     if (result.succeeded) {
       this.router.navigate(["/"]);
       this.toastrService.notification(result.message, "Başarılı!", ToastrMessageType.Success, ToastrPosition.TopRight)

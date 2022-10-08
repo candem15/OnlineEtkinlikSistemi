@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AppComponent } from '../app.component';
 
 @Injectable({
   providedIn: 'root'
@@ -23,9 +24,15 @@ export class AuthService {
     _isAuthenticated = token != null && !expired;
   }
 
+  get userRoleCheck() {
+    _userRole = localStorage.getItem("userRole");
+    return _userRole;
+  }
+
   get isAuthenticated() {
     return _isAuthenticated;
   }
 }
 
 export let _isAuthenticated: boolean;
+export let _userRole: string;

@@ -43,6 +43,7 @@ export class AdminCategoryComponent extends BaseComponent implements OnInit {
         ToastrMessageType.Success,
         ToastrPosition.TopRight
       );
+      this.refreshCategories();
     }, errorMessage => {
       this.toastrService.notification(errorMessage, "Hata!", ToastrMessageType.Error, ToastrPosition.TopRight);
     }

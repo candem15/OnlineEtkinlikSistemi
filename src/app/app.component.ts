@@ -14,7 +14,6 @@ export class AppComponent {
   constructor(
     public authService: AuthService,
     private toastrService: CustomToastrService) {
-    this.userRoleCheck(localStorage.getItem("userRole"));
     this.authService.identityCheck();
   }
 
@@ -22,7 +21,7 @@ export class AppComponent {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userRole");
     this.authService.identityCheck();
-    this.userRoleCheck("");
+    //this.userRoleCheck("");
     this.toastrService.notification(
       "Online etkinlik sistemine tekrar bekleriz. İyi günler dileriz.",
       "Çıkış başarılı!",
@@ -31,20 +30,23 @@ export class AppComponent {
     )
   }
 
-  async userRoleCheck(userType: string) {
-    if (userType == "Basit") {
+  // async userRoleCheck(userType: string) {
+  //   debugger;
+  //   if (userType == "Basit") {
 
-    } else if (userType == "Firma") {
+  //   } else if (userType == "Firma") {
 
-    }
-    else if (userType == "Admin") {
-      $("#admin-event").removeClass("visually-hidden");
-      $("#admin-category").removeClass("visually-hidden");
-    }
-    else {
-      $("#admin-event").addClass("visually-hidden");
-      $("#admin-category").addClass("visually-hidden");
-    }
-  }
+  //   }
+  //   else if (userType == "Admin") {
+  //     $("#admin-event").removeClass("visually-hidden");
+  //     $("#admin-category").removeClass("visually-hidden");
+  //     $("#admin-city").removeClass("visually-hidden");
+  //   }
+  //   else {
+  //     $("#admin-event").addClass("visually-hidden");
+  //     $("#admin-category").addClass("visually-hidden");
+  //     $("#admin-city").addClass("visually-hidden");
+  //   }
+  // }
 
 }
