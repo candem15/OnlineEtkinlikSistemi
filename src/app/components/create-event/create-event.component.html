@@ -1,0 +1,129 @@
+<div class="row" id="lr-container">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <div class="tab-pane fade show active" id="pills-login" role="tabpanel" aria-labelledby="tab-login">
+      <form [formGroup]="frmEvent" (ngSubmit)="onEventSubmit(frmEvent.value)">
+        <div class="text-center mb-3">
+          <br>
+        </div>
+
+        <!-- EventName input -->
+        <div class="form-outline mb-5">
+          <input formControlName="eventName" type="text" id="loginName" class="form-control"
+            [ngClass]="{'is-invalid': eventSubmitted && componentEvent.eventName.errors}" />
+          <label class="form-label" for="loginName">Etkinlik Adı</label>
+          <small class="form-text invalid-feedback"
+            *ngIf="componentEvent.eventName.errors?.required && (componentEvent.eventName.touched || eventSubmitted)">
+            Lütfen etkinlik adını giriniz!</small>
+          <small class="form-text invalid-feedback"
+            *ngIf="(componentEvent.eventName.errors?.minlength || componentEvent.eventName.errors?.maxlength) && (componentEvent.eventName.touched || eventSubmitted)">
+            Etkinlik adı 3-50 karakterden oluşmalıdır!</small>
+        </div>
+
+        <!-- Address input -->
+        <div class="form-outline mb-4">
+          <input formControlName="address" type="text" id="loginPassword" class="form-control"
+            [ngClass]="{'is-invalid': eventSubmitted && componentEvent.address.errors}" />
+          <label class="form-label" for="loginPassword">Adres</label>
+          <small class="form-text invalid-feedback"
+            *ngIf="componentEvent.address.errors?.required && (componentEvent.address.touched || eventSubmitted)">
+            Lütfen adres giriniz!</small>
+          <small class="form-text invalid-feedback"
+            *ngIf="(componentEvent.address.errors?.minlength || componentEvent.address.errors?.maxlength) && (componentEvent.address.touched || eventSubmitted)">
+            Adres tanımlaması 10-250 karakterden oluşmalıdır!</small>
+        </div>
+        <br>
+        <!-- description input -->
+        <div class="form-outline mb-4">
+          <input formControlName="description" type="text" id="loginPassword" class="form-control"
+            [ngClass]="{'is-invalid': eventSubmitted && componentEvent.description.errors}" />
+          <label class="form-label" for="loginPassword">Açıklama</label>
+          <small class="form-text invalid-feedback"
+            *ngIf="componentEvent.description.errors?.required && (componentEvent.description.touched || eventSubmitted)">
+            Lütfen adres giriniz!</small>
+          <small class="form-text invalid-feedback"
+            *ngIf="(componentEvent.description.errors?.minlength || componentEvent.description.errors?.maxlength) && (componentEvent.description.touched || eventSubmitted)">
+            Adres tanımlaması 10-250 karakterden oluşmalıdır!</small>
+        </div>
+        <br>
+        <!-- ticket input -->
+        <div class="form-outline mb-4">
+          <input formControlName="ticketPrice" type="number" id="loginPassword" class="form-control"
+            placeholder="Etkinlik biletsiz ise boş bırakınız." />
+          <label class="form-label" for="loginPassword">Bilet Ücreti</label>
+
+        </div>
+        <br>
+        <!-- quota input -->
+        <div class="form-outline mb-4">
+          <input formControlName="maxParticipantsNumber" type="number" id="loginPassword" class="form-control"
+            [ngClass]="{'is-invalid': eventSubmitted && componentEvent.maxParticipantsNumber.errors}" />
+          <label class="form-label" for="loginPassword">Kontenjan</label>
+          <small class="form-text invalid-feedback"
+            *ngIf="componentEvent.maxParticipantsNumber.errors?.required && (componentEvent.maxParticipantsNumber.touched || eventSubmitted)">
+            Lütfen kontenjan bilgisi giriniz!</small>
+          <small class="form-text invalid-feedback"
+            *ngIf="(componentEvent.maxParticipantsNumber.errors?.min) && (componentEvent.description.touched || eventSubmitted)">
+            Kontenjan en az 2 olmalıdır!</small>
+        </div>
+        <br>
+        <!-- category input -->
+        <div class="form-outline mb-4">
+          <mat-form-field appearance="fill">
+            <mat-label>Kategori seçiniz</mat-label>
+            <mat-select formControlName="categoryId" required>
+              <!-- <mat-option>--</mat-option> -->
+              <mat-option *ngFor="let category of categories" [value]="category.id">
+                {{category.categoryName}}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="componentEvent.categoryId.errors?.required && (componentEvent.categoryId.touched || eventSubmitted)">
+              Lütfen kategori seçiniz!</mat-error>
+          </mat-form-field>
+        </div>
+        <br>
+        <!-- category input -->
+        <div class="form-outline mb-4">
+          <mat-form-field appearance="fill">
+            <mat-label>Şehir seçiniz</mat-label>
+            <mat-select formControlName="cityId" required>
+              <!-- <mat-option>--</mat-option> -->
+              <mat-option *ngFor="let city of cities" [value]="city.id">
+                {{city.cityName}}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="componentEvent.cityId.errors?.required && (componentEvent.cityId.touched || eventSubmitted)">
+              Lütfen şehir seçiniz!</mat-error>
+          </mat-form-field>
+        </div>
+        <br>
+        <!-- Date input -->
+        <div class="form-outline mb-4">
+          <mat-form-field appearance="fill">
+            <mat-label>Tarih bilgilerini seçiniz</mat-label>
+            <mat-date-range-input [rangePicker]="picker">
+              <input matStartDate formControlName="applicationDeadline" placeholder="Son başvuru tarihi">
+              <input matEndDate formControlName="eventDate" placeholder="Etkinlik tarihi">
+            </mat-date-range-input>
+            <mat-hint>Ay/Gün/Yıl – Ay/Gün/Yıl</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+            <mat-error
+              *ngIf="componentEvent.applicationDeadline.errors?.required && (componentEvent.applicationDeadline.touched || eventSubmitted)">
+              Geçersiz son başvuru tarihi girdiniz!</mat-error>
+            <mat-error
+              *ngIf="componentEvent.eventDate.errors?.required && (componentEvent.eventDate.touched || eventSubmitted)">
+              Geçersiz etkinlik tarihi girdiniz</mat-error>
+          </mat-form-field>
+        </div>
+        <br>
+        <!-- Submit button -->
+        <button type="submit" class="btn btn-primary btn-block mb-4">Etkinlik oluştur</button>
+
+      </form>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
+</div>

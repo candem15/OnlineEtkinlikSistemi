@@ -27,7 +27,7 @@
                 *ngIf="authService.isAuthenticated && authService.userRoleCheck=='Admin'">Şehirleri Düzenle</a>
             </li>
             <li class="nav-item" id="user-event">
-              <a class="nav-link active" aria-current="page" routerLink="user-event"
+              <a class="nav-link active" aria-current="page" routerLink="create-event"
                 *ngIf="authService.isAuthenticated && authService.userRoleCheck=='Basit'">Etkinlik Düzenle</a>
             </li>
             <!-- <li class="nav-item dropdown">
@@ -48,8 +48,8 @@
               *ngIf="!authService.isAuthenticated">Giriş yap / Kayıt ol</a></li>
           <li class="nav-item"><a class="nav-link active" aria-current="page" routerLink="register" (click)="signOut()"
               *ngIf="authService.isAuthenticated">Çıkış yap <i class="fas fa-sign-out-alt sign-out"></i></a></li>
-          <li class="nav-item"><button class="btn btn-outline-primary" routerLink="admin" type="submit"
-              *ngIf="authService.isAuthenticated">Admin</button></li>
+          <!-- <li class="nav-item"><button class="btn btn-outline-primary" routerLink="admin" type="submit"
+              *ngIf="authService.isAuthenticated">Admin</button></li> -->
         </ul>
       </div>
     </nav>

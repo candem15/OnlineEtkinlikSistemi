@@ -16,8 +16,8 @@ const routes: Routes = [
       (module => module.AdminCategoryModule), canActivate: [AuthGuard]
   },
   {
-    path: "user-event", loadChildren: () => import("./components/user-event/user-event.module").then
-      (module => module.UserEventModule), canActivate: [AuthGuard]
+    path: "create-event", loadChildren: () => import("./components/create-event/create-event.module").then
+      (module => module.CreateEventModule), canActivate: [AuthGuard]
   },
   {
     path: "admin-city", loadChildren: () => import("./components/admin-city/admin-city.module").then

@@ -8,10 +8,6 @@ import { ComponentsModule } from './components/components.module';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { JwtModule } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
-import { RegisterLoginComponent } from './components/register-login/register-login.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AdminEventComponent } from './components/admin-event/admin-event.component';
-import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
