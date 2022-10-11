@@ -27,6 +27,11 @@ const routes: Routes = [
     path: "register", loadChildren: () => import("./components/register-login/register-login.module").then
       (module => module.RegisterLoginModule)
   }
+  ,
+  {
+    path: "join-events", loadChildren: () => import("./components/join-events/join-events.module").then
+      (module => module.JoinEventsModule)
+  }
 ];
 
 @NgModule({

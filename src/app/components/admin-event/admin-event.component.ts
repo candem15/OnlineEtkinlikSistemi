@@ -31,7 +31,7 @@ export class AdminEventComponent extends BaseComponent implements OnInit {
 
   async getAllUnconfirmedEvents() {
     this.showSpinner(SpinnerType.SquareLoader);
-    const allUnconfirmedEvents: { events: ListUnconfirmedEvents[] } = await this.eventService.read(
+    const allUnconfirmedEvents: { events: ListUnconfirmedEvents[] } = await this.eventService.readUnconfirmedEvents(
       () => this.hideSpinner(SpinnerType.SquareLoader),
       errorMessage => this.toastrService.notification(errorMessage, "Hata!", ToastrMessageType.Error, ToastrPosition.TopRight));
 

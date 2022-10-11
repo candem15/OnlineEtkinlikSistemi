@@ -10,6 +10,7 @@ import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/
 import { UserAuthService } from 'src/app/services/user-auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { BaseComponent, SpinnerType } from '../base/base.component';
+import { delay } from 'rxjs';
 
 declare var $: any;
 

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { AppComponent } from '../app.component';
 
@@ -7,7 +8,7 @@ import { AppComponent } from '../app.component';
 })
 export class AuthService {
 
-  constructor(private jwtHelper: JwtHelperService) { }
+  constructor(private jwtHelper: JwtHelperService, private router:Router) { }
 
   identityCheck() {
 
@@ -19,6 +20,7 @@ export class AuthService {
     catch {
       localStorage.removeItem("userRole");
       expired = true;
+      this.router.navigate(["register-login"]);
     }
 
     _isAuthenticated = token != null && !expired;
