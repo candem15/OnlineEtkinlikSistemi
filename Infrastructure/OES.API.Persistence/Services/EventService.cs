@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Dtos.Event;
+using OES.API.Application.Exceptions;
 using OES.API.Application.Features.Commands.Event.ConfirmEvent;
 using OES.API.Application.Features.Commands.Event.CreateEvent;
 using OES.API.Application.Features.Commands.Event.DeleteEvent;
+using OES.API.Application.Features.Commands.Event.JoinToEvent;
 using OES.API.Application.Features.Commands.Event.RejectEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
+using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
+using OES.API.Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,8 +32,9 @@ namespace OES.API.Persistence.Services
         private ICityReadRepository _cityReadRepository;
         private IQuotaReadRepository _quotaReadRepository;
         private IQuotaWriteRepository _quotaWriteRepository;
+        private UserManager<AppUser> _userManager;
         private IMapper _mapper;
-        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper)
+        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper, UserManager<AppUser> userManager)
         {
             _eventReadRepository = eventReadRepository;
             _eventWriteRepository = eventWriteRepository;
@@ -37,6 +43,7 @@ namespace OES.API.Persistence.Services
             _quotaReadRepository = quotaReadRepository;
             _quotaWriteRepository = quotaWriteRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
         public async Task<CreateEventCommandResponse> CreateAsync(CreateEventCommandRequest createEvent)
         {
@@ -108,9 +115,10 @@ namespace OES.API.Persistence.Services
 
         public async Task<GetAllConfirmedEventsQueryResponse> GetAllConfirmedEventsAsync(GetAllConfirmedEventsQueryRequest events)
         {
+            _eventReadRepository.EnableLazyLoading();
             List<Event> confirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == true).ToList();
 
-            return new GetAllConfirmedEventsQueryResponse() { Events = confirmedEvents };
+            return new GetAllConfirmedEventsQueryResponse() { Events = _mapper.Map<List<ConfirmedEventsResponse>>(confirmedEvents) };
         }
 
         public async Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail)
@@ -136,11 +144,43 @@ namespace OES.API.Persistence.Services
             Event eventToReject = await _eventReadRepository.GetByIdAsync(rejectEvent.Id);
             if (eventToReject == null)
                 return new RejectEventCommandResponse { Message = "Reddedilmek istenen etkinlik bulunumadı!", Succeeded = false };
-            
+
             await _eventWriteRepository.RemoveAsync(rejectEvent.Id);
             await _eventWriteRepository.SaveChangesAsync();
 
             return new RejectEventCommandResponse() { Message = "Etkinlik başarıyla reddedilmiştir!", Succeeded = true };
+        }
+
+        public async Task<JoinToEventCommandResponse> JoinToEventAsync(JoinToEventCommandRequest joinToEvent)
+        {
+            _eventReadRepository.EnableLazyLoading();
+            _eventWriteRepository.EnableLazyLoading();
+            try
+            {
+                Event eventToJoin = await _eventReadRepository.GetByIdAsync(joinToEvent.EventId);
+                if (eventToJoin.Users.Any(x => x.Id == joinToEvent.Id))
+                    throw new AlreadyJoinedToEventException();
+                AppUser joinEventUser = await _userManager.FindByIdAsync(joinToEvent.Id);
+                Quota quotaToUpdate = _quotaReadRepository.GetWhere(x => x.EventId == Guid.Parse(joinToEvent.EventId)).FirstOrDefault();
+                if (quotaToUpdate.NumberOfParticipants >= quotaToUpdate.MaxParticipantsNumber)
+                    throw new QuotaFullException();
+                eventToJoin.Users.Add(joinEventUser);
+                quotaToUpdate.NumberOfParticipants += 1;
+                _quotaWriteRepository.Update(quotaToUpdate);
+                _quotaWriteRepository.SaveChangesAsync();
+                _eventWriteRepository.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new AlreadyJoinedToEventException();
+            }
+            return new JoinToEventCommandResponse();
+        }
+
+        public async Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request)
+        {
+            List<AppUser> companies = _userManager.Users.Where(x => x.WebAddressUrl != null).ToList();
+            return new GetCompaniesToBuyTicketQueryResponse() { Companies = _mapper.Map<List<GetCompaniesToBuyTicketResponse>>(companies) };
         }
     }
 }

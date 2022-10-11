@@ -36,6 +36,9 @@ namespace OES.API.Application.Mapping
                 .ReverseMap();
             CreateMap<CreateUserCommandResponse, CreateUserResponse>()
                 .ReverseMap();
+            CreateMap<AppUser, GetCompaniesToBuyTicketResponse>()
+                .ForMember(dest => dest.WebAddressUrl, opt => opt.MapFrom(src => src.WebAddressUrl))
+                .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Name));
 
             //City mappings
             CreateMap<CreateCityCommandRequest, City>()
@@ -80,6 +83,19 @@ namespace OES.API.Application.Mapping
                .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate))
                .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.EventName))
                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+            CreateMap<Event, ConfirmedEventsResponse>()
+               .ForMember(dest => dest.CategoryName, opt => opt.MapFrom(src => src.Category.CategoryName))
+               .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.City.CityName))
+               .ForMember(dest => dest.MaxParticipantsNumber, opt => opt.MapFrom(src => src.Quota.MaxParticipantsNumber))
+               .ForMember(dest => dest.NumberOfParticipants, opt => opt.MapFrom(src => src.Quota.NumberOfParticipants))
+               .ForMember(dest => dest.TicketPrice, opt => opt.MapFrom(src => src.Ticket.TicketPrice))
+               .ForMember(dest => dest.Address, opt => opt.MapFrom(src => src.Address))
+               .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
+               .ForMember(dest => dest.ApplicationDeadline, opt => opt.MapFrom(src => src.ApplicationDeadline))
+               .ForMember(dest => dest.EventDate, opt => opt.MapFrom(src => src.EventDate))
+               .ForMember(dest => dest.EventName, opt => opt.MapFrom(src => src.EventName))
+               .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+
         }
     }
 }

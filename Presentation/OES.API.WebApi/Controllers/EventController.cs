@@ -5,10 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.Event.ConfirmEvent;
 using OES.API.Application.Features.Commands.Event.CreateEvent;
 using OES.API.Application.Features.Commands.Event.DeleteEvent;
+using OES.API.Application.Features.Commands.Event.JoinToEvent;
 using OES.API.Application.Features.Commands.Event.RejectEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
+using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 
 namespace OES.API.WebApi.Controllers
 {
@@ -63,6 +65,15 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
+        [HttpPut("join-to-event")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
+        public async Task<IActionResult> JoinToEvent([FromBody] JoinToEventCommandRequest joinToEventCommandRequest)
+        {
+            joinToEventCommandRequest.Id = User.FindFirst("userId")?.Value;
+            JoinToEventCommandResponse response = await _mediatR.Send(joinToEventCommandRequest);
+            return Ok(response);
+        }
+
         [HttpGet("get-unconfirmed-events")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Admin")]
         public async Task<IActionResult> GetAllUnconfirmedEvents([FromQuery] GetAllUnconfirmedEventsQueryRequest getAllUnconfirmedEventsQueryRequest)
@@ -72,10 +83,18 @@ namespace OES.API.WebApi.Controllers
         }
 
         [HttpGet("get-confirmed-events")]
-        [Authorize(AuthenticationSchemes = "Default", Roles = "Firma")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
         public async Task<IActionResult> GetAllConfirmedEvents([FromQuery] GetAllConfirmedEventsQueryRequest getAllConfirmedEventsQueryRequest)
         {
             GetAllConfirmedEventsQueryResponse response = await _mediatR.Send(getAllConfirmedEventsQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("get-companies-to-buy-ticket")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
+        public async Task<IActionResult> GetCompaniesToBuyTicket([FromQuery]GetCompaniesToBuyTicketQueryRequest companiesToBuyTicketQueryRequest)
+        {
+            GetCompaniesToBuyTicketQueryResponse response = await _mediatR.Send(companiesToBuyTicketQueryRequest);
             return Ok(response);
         }
     }

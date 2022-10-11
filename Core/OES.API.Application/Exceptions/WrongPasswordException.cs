@@ -9,7 +9,11 @@ namespace OES.API.Application.Exceptions
 {
     public class WrongPasswordException : Exception
     {
-        public WrongPasswordException():base("Hatalı şifre girdiniz. Lütfen tekrar deneyiniz.")
+        public WrongPasswordException() : base("Hatalı şifre girdiniz. Lütfen tekrar deneyiniz.")
+        {
+        }
+
+        public WrongPasswordException(string? message) : base(message)
         {
         }
 
@@ -17,8 +21,5 @@ namespace OES.API.Application.Exceptions
         {
         }
 
-        protected WrongPasswordException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
     }
 }

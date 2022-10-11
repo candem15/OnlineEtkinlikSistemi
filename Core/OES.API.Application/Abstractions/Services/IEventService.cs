@@ -1,11 +1,13 @@
 ﻿using OES.API.Application.Features.Commands.Event.ConfirmEvent;
 using OES.API.Application.Features.Commands.Event.CreateEvent;
 using OES.API.Application.Features.Commands.Event.DeleteEvent;
+using OES.API.Application.Features.Commands.Event.JoinToEvent;
 using OES.API.Application.Features.Commands.Event.RejectEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
+using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 using OES.API.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -25,6 +27,7 @@ namespace OES.API.Application.Abstractions.Services
         Task<GetAllUnconfirmedEventsQueryResponse> GetAllUnconfirmedEventsAsync(GetAllUnconfirmedEventsQueryRequest events);
         Task<GetAllConfirmedEventsQueryResponse> GetAllConfirmedEventsAsync(GetAllConfirmedEventsQueryRequest events);
         Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail);
-
+        Task<JoinToEventCommandResponse> JoinToEventAsync(JoinToEventCommandRequest joinToEvent);
+        Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request);
     }
 }
