@@ -13,6 +13,7 @@ using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
+using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
 using OES.API.Domain.Identity;
@@ -181,6 +182,14 @@ namespace OES.API.Persistence.Services
         {
             List<AppUser> companies = _userManager.Users.Where(x => x.WebAddressUrl != null).ToList();
             return new GetCompaniesToBuyTicketQueryResponse() { Companies = _mapper.Map<List<GetCompaniesToBuyTicketResponse>>(companies) };
+        }
+
+        public async Task<GetEventsByOrganizerQueryResponse> GetEventsByOrganizerAsync(GetEventsByOrganizerQueryRequest request)
+        {
+            _eventReadRepository.EnableLazyLoading();
+            List<Event> events = _eventReadRepository.GetWhere(x => x.OrganizerId == request.Id).ToList();
+
+            return new GetEventsByOrganizerQueryResponse() { Events = _mapper.Map<List<GetEventsByOrganizerResponse>>(events) };
         }
     }
 }

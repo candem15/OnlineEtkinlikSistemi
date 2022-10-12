@@ -11,6 +11,7 @@ using OES.API.Application.Features.Commands.Event.UpdateEvent;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
+using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
 
 namespace OES.API.WebApi.Controllers
 {
@@ -33,7 +34,7 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
-        [HttpPost("update-event")]
+        [HttpPut("update-event")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
         public async Task<IActionResult> UpdateEvent(UpdateEventCommandRequest updateEventCommandRequest)
         {
@@ -92,9 +93,18 @@ namespace OES.API.WebApi.Controllers
 
         [HttpGet("get-companies-to-buy-ticket")]
         [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
-        public async Task<IActionResult> GetCompaniesToBuyTicket([FromQuery]GetCompaniesToBuyTicketQueryRequest companiesToBuyTicketQueryRequest)
+        public async Task<IActionResult> GetCompaniesToBuyTicket([FromQuery] GetCompaniesToBuyTicketQueryRequest companiesToBuyTicketQueryRequest)
         {
             GetCompaniesToBuyTicketQueryResponse response = await _mediatR.Send(companiesToBuyTicketQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("get-events-by-organizer")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
+        public async Task<IActionResult> GetEventsByOrganizer([FromQuery] GetEventsByOrganizerQueryRequest getEventsByOrganizerQueryRequest)
+        {
+            getEventsByOrganizerQueryRequest.Id = User.FindFirst("userId")?.Value;
+            GetEventsByOrganizerQueryResponse response = await _mediatR.Send(getEventsByOrganizerQueryRequest);
             return Ok(response);
         }
     }

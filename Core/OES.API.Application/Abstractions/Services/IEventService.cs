@@ -8,6 +8,7 @@ using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
+using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
 using OES.API.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -29,5 +30,7 @@ namespace OES.API.Application.Abstractions.Services
         Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail);
         Task<JoinToEventCommandResponse> JoinToEventAsync(JoinToEventCommandRequest joinToEvent);
         Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request);
+
+        Task<GetEventsByOrganizerQueryResponse> GetEventsByOrganizerAsync(GetEventsByOrganizerQueryRequest request);
     }
 }
