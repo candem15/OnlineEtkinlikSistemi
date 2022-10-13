@@ -12,10 +12,13 @@ using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
+using OES.API.Application.Features.Queries.Event.GetEventsByUser;
+using OES.API.Application.Features.Queries.Event.GetEventsInXml;
 
 namespace OES.API.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class EventController : ControllerBase
     {
@@ -105,6 +108,34 @@ namespace OES.API.WebApi.Controllers
         {
             getEventsByOrganizerQueryRequest.Id = User.FindFirst("userId")?.Value;
             GetEventsByOrganizerQueryResponse response = await _mediatR.Send(getEventsByOrganizerQueryRequest);
+            return Ok(response);
+        }
+
+        [HttpGet("get-events-by-user")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
+        public async Task<IActionResult> GetEventsByUser([FromQuery] GetEventsByUserQueryRequest getEventsByOrganizerQueryRequest)
+        {
+            getEventsByOrganizerQueryRequest.Id = User.FindFirst("userId")?.Value;
+            GetEventsByUserQueryResponse response = await _mediatR.Send(getEventsByOrganizerQueryRequest);
+            return Ok(response);
+        }
+
+
+        [Produces("application/xml")]
+        [HttpGet("get-events-in-xml")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Firma")]
+        public async Task<IActionResult> GetEventsInXml([FromQuery] GetEventsForCompaniesQueryRequest getEventsForCompaniesQueryRequest)
+        {
+            GetEventsForCompaniesQueryResponse response = await _mediatR.Send(getEventsForCompaniesQueryRequest);
+            return Ok(response);
+        }
+
+
+        [HttpGet("get-events-in-json")]
+        [Authorize(AuthenticationSchemes = "Default", Roles = "Firma")]
+        public async Task<IActionResult> GetEventsInJson([FromQuery] GetEventsForCompaniesQueryRequest getEventsForCompaniesQueryRequest)
+        {
+            GetEventsForCompaniesQueryResponse response = await _mediatR.Send(getEventsForCompaniesQueryRequest);
             return Ok(response);
         }
     }

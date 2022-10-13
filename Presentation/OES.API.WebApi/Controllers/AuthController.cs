@@ -6,6 +6,7 @@ using OES.API.Application.Features.Commands.AppUser.LoginUser;
 namespace OES.API.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class AuthController : ControllerBase
     {

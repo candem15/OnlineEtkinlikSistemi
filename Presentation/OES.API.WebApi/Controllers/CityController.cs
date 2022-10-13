@@ -10,6 +10,7 @@ using OES.API.Application.Features.Queries.City.GetAllCities;
 namespace OES.API.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class CityController : ControllerBase
     {

@@ -19,7 +19,7 @@ namespace OES.API.Domain.Entities
         public DateTime ApplicationDeadline { get; set; }
         public DateTime EventDate { get; set; }
         public string? Description { get; set; }
-        public bool EventConfirmation { get; set; }
+        public bool? EventConfirmation { get; set; }
         [JsonIgnore]
         public virtual AppUser Organizer { get; set; }
         [JsonIgnore]

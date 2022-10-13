@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Dtos.Event;
 using OES.API.Application.Exceptions;
@@ -14,6 +15,8 @@ using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
+using OES.API.Application.Features.Queries.Event.GetEventsByUser;
+using OES.API.Application.Features.Queries.Event.GetEventsInXml;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
 using OES.API.Domain.Identity;
@@ -54,7 +57,7 @@ namespace OES.API.Persistence.Services
                 Id = newId,
                 OrganizerId = createEvent.Id,
                 EventDate = createEvent.EventDate,
-                EventConfirmation = false,
+                EventConfirmation = null,
                 EventName = createEvent.EventName,
                 ApplicationDeadline = createEvent.ApplicationDeadline,
                 Address = createEvent.Address,
@@ -145,8 +148,8 @@ namespace OES.API.Persistence.Services
             Event eventToReject = await _eventReadRepository.GetByIdAsync(rejectEvent.Id);
             if (eventToReject == null)
                 return new RejectEventCommandResponse { Message = "Reddedilmek istenen etkinlik bulunumadı!", Succeeded = false };
-
-            await _eventWriteRepository.RemoveAsync(rejectEvent.Id);
+            eventToReject.EventConfirmation = false;
+            _eventWriteRepository.Update(eventToReject);
             await _eventWriteRepository.SaveChangesAsync();
 
             return new RejectEventCommandResponse() { Message = "Etkinlik başarıyla reddedilmiştir!", Succeeded = true };
@@ -191,5 +194,25 @@ namespace OES.API.Persistence.Services
 
             return new GetEventsByOrganizerQueryResponse() { Events = _mapper.Map<List<GetEventsByOrganizerResponse>>(events) };
         }
+
+        public async Task<GetEventsForCompaniesQueryResponse> GetEventsInXmlAsync(GetEventsForCompaniesQueryRequest request)
+        {
+            _eventReadRepository.EnableLazyLoading();
+            List<Event> events = _eventReadRepository.GetWhere(x => x.EventConfirmation == true && x.Ticket.TicketPrice != null).ToList();
+            return new GetEventsForCompaniesQueryResponse() { Events = _mapper.Map<List<GetEventsForCompaniesResponse>>(events) };
+        }
+
+        public async Task<GetEventsByUserQueryResponse> GetEventsByUserAsync(GetEventsByUserQueryRequest request)
+        {
+            AppUser user = await _userManager.Users.Include(x => x.Events).ThenInclude(x => x.Quota)
+                .Include(x => x.Events).ThenInclude(x => x.Ticket)
+                .Include(x => x.Events).ThenInclude(x => x.Category)
+                .Include(x => x.Events).ThenInclude(x => x.City)
+                .SingleOrDefaultAsync(x => x.Id == request.Id);
+
+            List<Event> eventsByUser = user.Events.ToList();
+            return new GetEventsByUserQueryResponse() { Events = _mapper.Map<List<GetEventsByUserResponse>>(eventsByUser) };
+        }
+
     }
 }

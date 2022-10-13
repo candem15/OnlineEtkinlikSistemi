@@ -16,6 +16,7 @@ builder.Services.AddApplicationServices();
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddControllers()
+    .AddXmlSerializerFormatters()
     .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore)
     .AddFluentValidation(opt =>
     {

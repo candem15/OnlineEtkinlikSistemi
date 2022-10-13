@@ -10,6 +10,7 @@ using System.Security.Claims;
 namespace OES.API.WebApi.Controllers
 {
     [Route("api/[controller]")]
+    [Produces("application/json")]
     [ApiController]
     public class UserController : ControllerBase
     {
