@@ -1,14 +1,12 @@
-export class ListConfirmedEvents{
-  id: string;
+export class EventsByUser {
   eventName: string;
   address: string;
-  applicationDeadline: Date;
   eventDate: Date;
   description?: string;
   categoryName: string;
   cityName: string;
-  eventConfirmation?: boolean;
   numberOfParticipants: number;
   maxParticipantsNumber: number;
   ticketPrice?: number;
+  participation: boolean;
 }

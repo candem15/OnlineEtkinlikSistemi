@@ -4,7 +4,6 @@ import { MatOption } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatTableDataSource } from '@angular/material/table';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { Observable, of } from 'rxjs';
 import { ListCompaniesToBuyTicket } from 'src/app/contracts/list_companies_to_buy_ticket';
 import { ListConfirmedEvents } from 'src/app/contracts/list_confirmed_events';
 import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/services/custom-toastr.service';

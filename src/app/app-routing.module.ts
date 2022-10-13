@@ -26,11 +26,18 @@ const routes: Routes = [
   {
     path: "register", loadChildren: () => import("./components/register-login/register-login.module").then
       (module => module.RegisterLoginModule)
-  }
-  ,
+  },
   {
     path: "join-events", loadChildren: () => import("./components/join-events/join-events.module").then
-      (module => module.JoinEventsModule)
+      (module => module.JoinEventsModule), canActivate: [AuthGuard]
+  },
+  {
+    path: "update-event", loadChildren: () => import("./components/update-event/update-event.module").then
+      (module => module.UpdateEventModule), canActivate: [AuthGuard]
+  },
+  {
+    path: "user-activities", loadChildren: () => import("./components/user-activities/user-activities.module").then
+      (module => module.UserActivitiesModule), canActivate: [AuthGuard]
   }
 ];
 

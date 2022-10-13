@@ -1,0 +1,107 @@
+<div class="mat-elevation-z8">
+  <mat-form-field appearance="fill">
+    <mat-label>Katılıma göre grupla</mat-label>
+    <mat-select #matRefCategory (selectionChange)="applyFilter($event)">
+      <mat-option value="Participated">Katıldığım Etkinlikler
+      </mat-option>
+      <mat-option value="NotParticipated">Katılacağım Etkinlikler
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="getActivities()">Filteyi Sıfırla</button>
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+    <ng-container matColumnDef="EventName">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Adı</th>
+      <td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CategoryName">
+      <th mat-header-cell *matHeaderCellDef>Kategori</th>
+      <td mat-cell *matCellDef="let element"> {{element.categoryName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CityName">
+      <th mat-header-cell *matHeaderCellDef>Şehir</th>
+      <td mat-cell *matCellDef="let element"> {{element.cityName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Address">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Adresi</th>
+      <td mat-cell *matCellDef="let element"> (Detaylar kısmında) </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Description">
+      <th mat-header-cell *matHeaderCellDef>Açıklama</th>
+      <td mat-cell *matCellDef="let element"> (Detaylar kısmında) </td>
+    </ng-container>
+
+    <ng-container matColumnDef="TicketPrice">
+      <th mat-header-cell *matHeaderCellDef>Bilet Ücreti</th>
+      <td mat-cell *matCellDef="let element"> {{element.ticketPrice}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="EventDate">
+      <th mat-header-cell *matHeaderCellDef>Etkinlik Tarihi</th>
+      <td mat-cell *matCellDef="let element"> {{element.eventDate.substr(0,10)}} </td>
+    </ng-container>>
+
+    <ng-container matColumnDef="MaxParticipantsNumber">
+      <th mat-header-cell *matHeaderCellDef>Kontenjan</th>
+      <td mat-cell *matCellDef="let element"> {{element.maxParticipantsNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="NumberOfParticipants">
+      <th mat-header-cell *matHeaderCellDef>Katılımcı Sayısı</th>
+      <td mat-cell *matCellDef="let element"> {{element.numberOfParticipants}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Participation">
+      <th mat-header-cell *matHeaderCellDef>Katılım Durumu</th>
+      <td mat-cell *matCellDef="let element">
+        <button *ngIf="element.participation" title="Katılım Sağlandı" mat-icon-button style="color: green;">
+          <mat-icon>check</mat-icon>
+        </button>
+        <button *ngIf="element.participation==false" title="Henüz Katılmadınız" mat-icon-button style="color: red;">
+          <mat-icon>close</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Detaylar</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row"
+          (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <!-- <div class="example-element-diagram">
+            <div class="example-element-position"><strong>Etkinlik Adresi</strong> <br> {{element.address}} </div>
+          </div> -->
+          <div class="example-element-description">
+            <strong>Açıklama :</strong> {{element.description}} <br>
+            <strong>Etkinlik Adresi :</strong> {{element.address}}
+            <span class="example-element-description-attribution"> </span>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
+    <!-- <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
+  </table>
+
+</div>
