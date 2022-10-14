@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
@@ -9,13 +10,21 @@ import { CustomToastrService, ToastrMessageType, ToastrPosition } from 'src/app/
 import { EventService } from 'src/app/services/event.service';
 import { HttpClientService } from 'src/app/services/http-client.service';
 import { BaseComponent, SpinnerType } from '../base/base.component';
+import { ExpandableElements } from '../join-events/join-events.component';
 
 declare var $: any;
 
 @Component({
   selector: 'app-admin-event',
   templateUrl: './admin-event.component.html',
-  styleUrls: ['./admin-event.component.scss']
+  styleUrls: ['./admin-event.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class AdminEventComponent extends BaseComponent implements OnInit {
 
@@ -28,6 +37,8 @@ export class AdminEventComponent extends BaseComponent implements OnInit {
 
   displayedColumns: string[] = ['EventName', 'CategoryName', 'CityName', 'Description', 'Address', 'Quota', 'TicketPrice', 'ApplicationDeadline', 'EventDate', 'EventConfirmation', 'ConfirmEvent', 'RejectEvent'];
   dataSource: MatTableDataSource<ListUnconfirmedEvents> = null;
+  columnsToDisplayWithExpand = [...this.displayedColumns, 'expand'];
+  expandedElement: ExpandableElements | null;
 
   async getAllUnconfirmedEvents() {
     this.showSpinner(SpinnerType.SquareLoader);

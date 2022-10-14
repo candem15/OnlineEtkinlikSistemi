@@ -1,5 +1,5 @@
 <div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
     <ng-container matColumnDef="EventName">
       <th mat-header-cell *matHeaderCellDef>Etkinlik Adı</th>
       <td mat-cell *matCellDef="let element"> {{element.eventName}} </td>
@@ -17,12 +17,12 @@
 
     <ng-container matColumnDef="Address">
       <th mat-header-cell *matHeaderCellDef>Etkinlik Adresi</th>
-      <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      <td mat-cell *matCellDef="let element"> (Detaylar kısmında) </td>
     </ng-container>
 
     <ng-container matColumnDef="Description">
       <th mat-header-cell *matHeaderCellDef>Açıklama</th>
-      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+      <td mat-cell *matCellDef="let element"> (Detaylar kısmında) </td>
     </ng-container>
 
     <ng-container matColumnDef="Quota">
@@ -52,20 +52,53 @@
 
     <ng-container matColumnDef="ConfirmEvent">
       <th mat-header-cell *matHeaderCellDef width="60px">Onayla</th>
-      <td mat-cell *matCellDef="let element" > <button title="Onayla" (click)="confirmEvent(element.id)" mat-icon-button style="color: green;">
+      <td mat-cell *matCellDef="let element"> <button title="Onayla" (click)="confirmEvent(element.id)" mat-icon-button
+          style="color: green;">
           <mat-icon>check</mat-icon>
         </button> </td>
     </ng-container>
 
     <ng-container matColumnDef="RejectEvent">
       <th mat-header-cell *matHeaderCellDef width="60px">Reddet</th>
-      <td mat-cell *matCellDef="let element" > <button title="Reddet" (click)="rejectEvent(element.id)" mat-icon-button style="color: red;">
+      <td mat-cell *matCellDef="let element"> <button title="Reddet" (click)="rejectEvent(element.id)" mat-icon-button
+          style="color: red;">
           <mat-icon>close</mat-icon>
         </button> </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Detaylar</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row"
+          (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
+        <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+          <div class="example-element-description">
+            <strong>Açıklama :</strong> {{element.description}} <br>
+            <strong>Etkinlik Adresi :</strong> {{element.address}}
+            <span class="example-element-description-attribution"> </span>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+    </tr>
+    <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+    <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr> -->
   </table>
 
 </div>

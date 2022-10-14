@@ -74,6 +74,7 @@ export class JoinEventsComponent extends BaseComponent implements OnInit {
   async buyTicket($event: any, eventId: string) {
     window.open(`https://${$event.value}`);
     this.joinToEvent(eventId);
+    this.getAllConfirmedEvents();
   }
 
   async joinToEvent(eventId: string) {
@@ -90,9 +91,7 @@ export class JoinEventsComponent extends BaseComponent implements OnInit {
   async getCompanies() {
     const companies: { companies: ListCompaniesToBuyTicket[] } = await this.eventService.getCompaniesToBuyTicket(() => { },
       errorMessage => this.toastrService.notification(errorMessage, "Hata!", ToastrMessageType.Error, ToastrPosition.TopRight));
-    debugger;
     this.companies = companies.companies;
-
   }
 
   async refreshEvents() {

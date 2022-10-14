@@ -69,17 +69,6 @@
       <td mat-cell *matCellDef="let element"> {{element.numberOfParticipants}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="expand">
-      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Detaylar</th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button aria-label="expand row"
-          (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
-          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
-          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
-        </button>
-      </td>
-    </ng-container>
-
     <ng-container matColumnDef="JoinEvent">
       <th mat-header-cell *matHeaderCellDef width="60px">Katılma</th>
       <td mat-cell *matCellDef="let element"> <button
@@ -96,19 +85,27 @@
           *ngIf="element.ticketPrice!=null && element.numberOfParticipants < element.maxParticipantsNumber">
           <mat-label>Satıcıları Gör</mat-label>
           <mat-select (selectionChange)="buyTicket($event,element.id)">
-            <mat-option *ngFor="let company of companies" [value]="company.webAddressUrl">{{company.companyName}}
+            <mat-option *ngFor="let company of companies" [value]="company.websiteDomain">{{company.companyName}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </td>
     </ng-container>
 
+    <ng-container matColumnDef="expand">
+      <th mat-header-cell *matHeaderCellDef aria-label="row actions">Detaylar</th>
+      <td mat-cell *matCellDef="let element">
+        <button mat-icon-button aria-label="expand row"
+          (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+          <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+          <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="expandedDetail">
       <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplayWithExpand.length">
         <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <!-- <div class="example-element-diagram">
-            <div class="example-element-position"><strong>Etkinlik Adresi</strong> <br> {{element.address}} </div>
-          </div> -->
           <div class="example-element-description">
             <strong>Açıklama :</strong> {{element.description}} <br>
             <strong>Etkinlik Adresi :</strong> {{element.address}}
@@ -117,6 +114,7 @@
         </div>
       </td>
     </ng-container>
+
 
     <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
     <tr mat-row *matRowDef="let element; columns: columnsToDisplayWithExpand;" class="example-element-row"
