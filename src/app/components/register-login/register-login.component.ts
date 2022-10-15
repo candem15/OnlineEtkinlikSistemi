@@ -51,11 +51,11 @@ export class RegisterLoginComponent extends BaseComponent implements OnInit {
           Validators.minLength(2),
           Validators.maxLength(50),
         ]],
-      webAddressUrl: ["",
-        [
-          Validators.minLength(4),
-          Validators.maxLength(50),
-        ]],
+      // websiteDomain: ["",
+      //   [
+      //     Validators.minLength(4),
+      //     Validators.maxLength(50),
+      //   ]],
       username: ["",
         [
           Validators.required,
@@ -120,16 +120,16 @@ export class RegisterLoginComponent extends BaseComponent implements OnInit {
     }
   }
 
-  async userRegisterType(userType: string) {
-    if (userType == "basic") {
-      $("#webAddressSection").fadeOut("fast");
-      $("#surnameSection").fadeIn("fast");
-    } else {
-      $("#webAddressSection").removeClass("visually-hidden");
-      $("#webAddressSection").fadeIn("fast");
-      $("#surnameSection").fadeOut("fast");
-    }
-  }
+  // async userRegisterType(userType: string) {
+  //   if (userType == "basic") {
+  //     $("#webAddressSection").fadeOut("fast");
+  //     $("#surnameSection").fadeIn("fast");
+  //   } else {
+  //     $("#webAddressSection").removeClass("visually-hidden");
+  //     $("#webAddressSection").fadeIn("fast");
+  //     $("#surnameSection").fadeOut("fast");
+  //   }
+  // }
 
   async switchTabs(tabName: string) {
 

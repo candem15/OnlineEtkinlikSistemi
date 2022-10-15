@@ -72,15 +72,15 @@ export class JoinEventsComponent extends BaseComponent implements OnInit {
   }
 
   async buyTicket($event: any, eventId: string) {
-    window.open(`https://${$event.value}`);
     this.joinToEvent(eventId);
-    this.getAllConfirmedEvents();
+    window.open(`https://${$event.value}`);
   }
 
   async joinToEvent(eventId: string) {
     this.showSpinner(SpinnerType.SquareLoader);
     this.eventService.joinToEvent(eventId, () => {
       this.hideSpinner(SpinnerType.SquareLoader);
+      this.getAllConfirmedEvents();
       this.toastrService.notification("Etkinliğe başarıyla katılım sağladınız.", "Başarılı!", ToastrMessageType.Success, ToastrPosition.TopRight)
     }, errorMessage => {
       this.hideSpinner(SpinnerType.SquareLoader);
