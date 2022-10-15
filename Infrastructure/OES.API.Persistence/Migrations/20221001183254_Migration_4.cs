@@ -30,7 +30,7 @@ namespace OES.API.Persistence.Migrations
             migrationBuilder.RenameColumn(
                 name: "WebSitesi",
                 table: "AspNetUsers",
-                newName: "WebAddressUrl");
+                newName: "WebsiteDomain");
 
             migrationBuilder.CreateTable(
                 name: "Categories",
@@ -231,7 +231,7 @@ namespace OES.API.Persistence.Migrations
                 name: "Cities");
 
             migrationBuilder.RenameColumn(
-                name: "WebAddressUrl",
+                name: "WebsiteDomain",
                 table: "AspNetUsers",
                 newName: "WebSitesi");
 

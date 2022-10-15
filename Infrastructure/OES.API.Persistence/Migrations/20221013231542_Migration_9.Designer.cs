@@ -12,8 +12,8 @@ using OES.API.Persistence.Contexts;
 namespace OES.API.Persistence.Migrations
 {
     [DbContext(typeof(OESAPIDbContext))]
-    [Migration("20221006232800_Migration_6")]
-    partial class Migration_6
+    [Migration("20221013231542_Migration_9")]
+    partial class Migration_9
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -207,7 +207,7 @@ namespace OES.API.Persistence.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<bool>("EventConfirmation")
+                    b.Property<bool?>("EventConfirmation")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("EventDate")
@@ -233,6 +233,97 @@ namespace OES.API.Persistence.Migrations
                     b.HasIndex("OrganizerId");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Entities.Identity.BaseIdentity", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseIdentity");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "e2a380d6-21c1-4c83-ab87-53ac2e937e13",
+                            Email = "admin@admin.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            Name = "admin",
+                            NormalizedUserName = "ADMIN",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAXNckfRvujrGGZls1TDPGMTxZYvU3GlxsuER/gy1FwDilUEoj3CwhhepP5yJITCzw==",
+                            PhoneNumberConfirmed = false,
+                            TwoFactorEnabled = false,
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("OES.API.Domain.Entities.Quota", b =>
@@ -313,115 +404,39 @@ namespace OES.API.Persistence.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "b74d34ef-b4f4-4d8c-b6d7-4ac0412e8a36",
+                            ConcurrencyStamp = "a1e7465c-ce5a-4c5a-b6b9-0b8de6183bd4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "391c72c8-9403-4c93-a4a4-4c2febd00d74",
-                            ConcurrencyStamp = "5930e08e-3512-49a2-a492-3b60716a1464",
+                            ConcurrencyStamp = "e6c2c7ae-a6da-4d0a-8e7e-bc9878bf5e75",
                             Name = "Basit",
                             NormalizedName = "BASIT"
-                        },
-                        new
-                        {
-                            Id = "9505059f-22c8-4940-9889-52d6d05b5790",
-                            ConcurrencyStamp = "86ea67ef-4a56-44b3-ae0c-283be36c18a1",
-                            Name = "Firma",
-                            NormalizedName = "FIRMA"
                         });
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Entities.Identity.AppCompany", b =>
+                {
+                    b.HasBaseType("OES.API.Domain.Entities.Identity.BaseIdentity");
+
+                    b.Property<string>("WebsiteDomain")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("AppCompany");
                 });
 
             modelBuilder.Entity("OES.API.Domain.Identity.AppUser", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.HasBaseType("OES.API.Domain.Entities.Identity.BaseIdentity");
 
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Surname")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("WebsiteDomain")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "7c9dfbe1-8104-49e2-9b8d-75aecf8a844d",
-                            Email = "admin@admin.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            Name = "admin",
-                            NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEO1Nqwfil3PpcOm+uNM1F0j19QvdXoJPE20RlG+37CN7sOamEEzsheo2tlmwuojTxg==",
-                            PhoneNumberConfirmed = false,
-                            TwoFactorEnabled = false,
-                            UserName = "admin"
-                        });
+                    b.HasDiscriminator().HasValue("AppUser");
                 });
 
             modelBuilder.Entity("AppUserEvent", b =>
@@ -450,7 +465,7 @@ namespace OES.API.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Entities.Identity.BaseIdentity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -459,7 +474,7 @@ namespace OES.API.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Entities.Identity.BaseIdentity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -474,7 +489,7 @@ namespace OES.API.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Entities.Identity.BaseIdentity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -483,7 +498,7 @@ namespace OES.API.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Entities.Identity.BaseIdentity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

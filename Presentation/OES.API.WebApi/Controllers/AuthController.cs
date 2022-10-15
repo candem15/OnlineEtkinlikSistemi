@@ -22,5 +22,6 @@ namespace OES.API.WebApi.Controllers
             LoginUserCommandResponse response = await _mediatR.Send(loginUserCommandRequest);
             return Ok(response);
         }
+
     }
 }

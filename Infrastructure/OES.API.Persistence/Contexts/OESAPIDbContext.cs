@@ -12,13 +12,15 @@ using System.Threading.Tasks;
 
 namespace OES.API.Persistence.Contexts
 {
-    public class OESAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
+    public class OESAPIDbContext : IdentityDbContext<BaseUser, AppRole, string>
     {
         public OESAPIDbContext(DbContextOptions options) : base(options)
         {
 
         }
-
+        public DbSet<AppUser> AppUsers { get; set; }
+        public DbSet<BaseUser> BaseUsers { get; set; }
+        public DbSet<AppCompany> CompanyUsers { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Event> Events { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -36,9 +38,8 @@ namespace OES.API.Persistence.Contexts
 
             builder.Entity<AppRole>().HasData(new AppRole { Id = "2c5e174e-3b0e-446f-86af-483d56fd7210", Name = "Admin", NormalizedName = "ADMIN".ToUpper() });
             builder.Entity<AppRole>().HasData(new AppRole { Id = "391c72c8-9403-4c93-a4a4-4c2febd00d74", Name = "Basit", NormalizedName = "BASIT".ToUpper() });
-            builder.Entity<AppRole>().HasData(new AppRole { Id = "9505059f-22c8-4940-9889-52d6d05b5790", Name = "Firma", NormalizedName = "FIRMA".ToUpper() });
 
-            var hasher = new PasswordHasher<AppUser>();
+            var hasher = new PasswordHasher<BaseUser>();
 
             builder.Entity<AppUser>().HasData(
                 new AppUser
@@ -46,7 +47,8 @@ namespace OES.API.Persistence.Contexts
                     Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                     UserName = "admin",
                     NormalizedUserName = "ADMIN",
-                    Name = "admin",
+                    Name = "Eray",
+                    Surname = "Berberoğlu",
                     Email = "admin@admin.com",
                     PasswordHash = hasher.HashPassword(null, "adminPassword")
                 }

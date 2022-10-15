@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OES.API.Application.Dtos.Event
+namespace OES.API.Domain.Identity
 {
-    public class GetCompaniesToBuyTicketResponse
+    public class AppCompany : BaseUser
     {
-        public string CompanyName { get; set; }
         public string WebsiteDomain { get; set; }
     }
 }

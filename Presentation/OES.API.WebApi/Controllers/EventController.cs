@@ -120,23 +120,5 @@ namespace OES.API.WebApi.Controllers
             return Ok(response);
         }
 
-
-        [Produces("application/xml")]
-        [HttpGet("get-events-in-xml")]
-        [Authorize(AuthenticationSchemes = "Default", Roles = "Firma")]
-        public async Task<IActionResult> GetEventsInXml([FromQuery] GetEventsForCompaniesQueryRequest getEventsForCompaniesQueryRequest)
-        {
-            GetEventsForCompaniesQueryResponse response = await _mediatR.Send(getEventsForCompaniesQueryRequest);
-            return Ok(response);
-        }
-
-
-        [HttpGet("get-events-in-json")]
-        [Authorize(AuthenticationSchemes = "Default", Roles = "Firma")]
-        public async Task<IActionResult> GetEventsInJson([FromQuery] GetEventsForCompaniesQueryRequest getEventsForCompaniesQueryRequest)
-        {
-            GetEventsForCompaniesQueryResponse response = await _mediatR.Send(getEventsForCompaniesQueryRequest);
-            return Ok(response);
-        }
     }
 }

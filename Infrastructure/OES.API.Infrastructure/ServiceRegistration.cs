@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OES.API.Application.Abstractions.Token;
+using OES.API.Domain.Identity;
 using OES.API.Infrastructure.Services.Token;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace OES.API.Infrastructure
     {
         public static void AddInfrastructureServices(this IServiceCollection services)
         {
-            services.AddScoped<ITokenHandler, TokenHandler>();
+            services.AddScoped(typeof(ITokenHandler<>), typeof(TokenHandler<>));
         }
     }
 }

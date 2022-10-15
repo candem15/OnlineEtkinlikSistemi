@@ -36,6 +36,10 @@ namespace OES.API.Persistence
             }).AddEntityFrameworkStores<OESAPIDbContext>()
             .AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider); //Şifre değişikliği için gerekli provider bilgisi eklendi.
 
+            services.AddIdentityCore<AppCompany>().AddEntityFrameworkStores<OESAPIDbContext>()
+            //.AddTokenProvider<DataProtectorTokenProvider<AppCompany>>(TokenOptions.DefaultProvider)
+            .AddSignInManager<SignInManager<AppCompany>>(); 
+
             services.AddScoped<IEventReadRepository, EventReadRepository>();
             services.AddScoped<IEventWriteRepository, EventWriteRepository>();
 
@@ -49,6 +53,7 @@ namespace OES.API.Persistence
             services.AddScoped<IQuotaWriteRepository, QuotaWriteRepository>();
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<ICityService, CityService>();
             services.AddScoped<ICategoryService, CategoryService>();

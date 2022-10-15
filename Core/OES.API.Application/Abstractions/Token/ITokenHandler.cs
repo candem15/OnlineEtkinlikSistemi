@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace OES.API.Application.Abstractions.Token
 {
-    public interface ITokenHandler
+    public interface ITokenHandler<T> where T : BaseUser
     {
-        Task<Dtos.Token> CreateAccessToken(int dakika, AppUser user);
+        Task<Dtos.Token> CreateAccessToken(int dakika, T user);
     }
 }

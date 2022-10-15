@@ -4,6 +4,7 @@ using OES.API.Application.Dtos.Category;
 using OES.API.Application.Dtos.City;
 using OES.API.Application.Dtos.Event;
 using OES.API.Application.Dtos.User;
+using OES.API.Application.Features.Commands.AppCompany.RegisterCompany;
 using OES.API.Application.Features.Commands.AppUser.CreateUser;
 using OES.API.Application.Features.Commands.AppUser.LoginUser;
 using OES.API.Application.Features.Commands.Category.CreateCategory;
@@ -28,17 +29,14 @@ namespace OES.API.Application.Mapping
             //User mappings
             CreateMap<AppUser, CreateUser>()
                  .ReverseMap();
-            CreateMap<AppUser, CreateUserCommandRequest>()
-               .ReverseMap();
-            CreateMap<AppUser, CreateUser>()
-                .ReverseMap();
             CreateMap<CreateUser, CreateUserCommandRequest>()
                 .ReverseMap();
             CreateMap<CreateUserCommandResponse, CreateUserResponse>()
                 .ReverseMap();
-            CreateMap<AppUser, GetCompaniesToBuyTicketResponse>()
-                .ForMember(dest => dest.WebAddressUrl, opt => opt.MapFrom(src => src.WebAddressUrl))
+            CreateMap<AppCompany, GetCompaniesToBuyTicketResponse>()
+                .ForMember(dest => dest.WebsiteDomain, opt => opt.MapFrom(src => src.WebsiteDomain))
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Name));
+
 
             //City mappings
             CreateMap<CreateCityCommandRequest, City>()
@@ -51,6 +49,10 @@ namespace OES.API.Application.Mapping
             CreateMap<City, GetAllCitiesResponse>()
              .ForMember(dest => dest.CityName, opt => opt.MapFrom(src => src.CityName))
              .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+
+            //Company mappings
+            CreateMap<AppCompany, RegisterCompanyCommandRequest>()
+                .ReverseMap();
 
             //Auth mappings
             CreateMap<LoginUserCommandResponse, Token>()

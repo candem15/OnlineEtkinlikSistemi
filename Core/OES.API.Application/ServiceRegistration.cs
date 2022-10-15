@@ -25,6 +25,7 @@ namespace OES.API.Application
             services.AddScoped<IValidator<Category>, CategoryValidator>();
             services.AddScoped<IValidator<City>, CityValidator>();
             services.AddScoped<IValidator<AppUser>, AppUserValidator>();
+            services.AddScoped<IValidator<AppCompany>, AppCompanyValidator>();
         }
     }
 }

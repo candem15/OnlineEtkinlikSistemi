@@ -29,7 +29,7 @@ namespace OES.API.Application.Abstractions.Services
         Task<RejectEventCommandResponse> RejectEventAsync(RejectEventCommandRequest rejectEvent);
         Task<GetAllUnconfirmedEventsQueryResponse> GetAllUnconfirmedEventsAsync(GetAllUnconfirmedEventsQueryRequest events);
         Task<GetAllConfirmedEventsQueryResponse> GetAllConfirmedEventsAsync(GetAllConfirmedEventsQueryRequest events);
-        Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail);
+        //Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail);
         Task<JoinToEventCommandResponse> JoinToEventAsync(JoinToEventCommandRequest joinToEvent);
         Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request);
         Task<GetEventsByOrganizerQueryResponse> GetEventsByOrganizerAsync(GetEventsByOrganizerQueryRequest request);

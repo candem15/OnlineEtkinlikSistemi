@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using OES.API.Domain.Entities;
+using OES.API.Domain.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,9 @@ using System.Threading.Tasks;
 
 namespace OES.API.Domain.Identity
 {
-    public class AppUser : IdentityUser<string>
+    public class AppUser : BaseUser
     {
-        public string Name { get; set; }
-        public string? Surname { get; set; }
-        public string? WebAddressUrl { get; set; }
+        public string Surname { get; set; }
         [JsonIgnore]
         public virtual ICollection<Event>? Events { get; set; }
         [JsonIgnore]

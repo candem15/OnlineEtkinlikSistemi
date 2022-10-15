@@ -392,7 +392,7 @@ namespace OES.API.Persistence.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
 
-                    b.Property<string>("WebAddressUrl")
+                    b.Property<string>("WebsiteDomain")
                         .HasColumnType("text");
 
                     b.HasKey("Id");

@@ -17,12 +17,12 @@ namespace OES.API.Persistence.Services
     public class AuthService : IAuthService
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly ITokenHandler _tokenHandler;
+        private readonly ITokenHandler<AppUser> _tokenHandler;
         private readonly IConfiguration _configuration;
         readonly SignInManager<AppUser> _signInManager;
         private readonly IUserService _userService;
 
-        public AuthService(UserManager<AppUser> userManager, ITokenHandler tokenHandler, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService)
+        public AuthService(UserManager<AppUser> userManager, ITokenHandler<AppUser> tokenHandler, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService)
         {
             _userManager = userManager;
             _tokenHandler = tokenHandler;

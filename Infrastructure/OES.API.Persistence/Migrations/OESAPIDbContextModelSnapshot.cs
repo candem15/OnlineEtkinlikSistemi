@@ -311,27 +311,20 @@ namespace OES.API.Persistence.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "624b48ee-1d38-4d95-8245-dde41a409de4",
+                            ConcurrencyStamp = "85547760-db56-4901-afa0-396f52047664",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "391c72c8-9403-4c93-a4a4-4c2febd00d74",
-                            ConcurrencyStamp = "72899da2-5781-46c6-a3b6-45736a5bd532",
+                            ConcurrencyStamp = "19a3a443-0dbc-4d4b-8287-e61e1cb151b9",
                             Name = "Basit",
                             NormalizedName = "BASIT"
-                        },
-                        new
-                        {
-                            Id = "9505059f-22c8-4940-9889-52d6d05b5790",
-                            ConcurrencyStamp = "8ef89bb8-2c03-4126-b6ec-ec9763f67f64",
-                            Name = "Firma",
-                            NormalizedName = "FIRMA"
                         });
                 });
 
-            modelBuilder.Entity("OES.API.Domain.Identity.AppUser", b =>
+            modelBuilder.Entity("OES.API.Domain.Identity.BaseUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -341,6 +334,10 @@ namespace OES.API.Persistence.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -380,18 +377,12 @@ namespace OES.API.Persistence.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
-                    b.Property<string>("Surname")
-                        .HasColumnType("text");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("boolean");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)");
-
-                    b.Property<string>("WebAddressUrl")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -404,21 +395,46 @@ namespace OES.API.Persistence.Migrations
 
                     b.ToTable("AspNetUsers", (string)null);
 
+                    b.HasDiscriminator<string>("Discriminator").HasValue("BaseUser");
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Identity.AppCompany", b =>
+                {
+                    b.HasBaseType("OES.API.Domain.Identity.BaseUser");
+
+                    b.Property<string>("WebsiteDomain")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("AppCompany");
+                });
+
+            modelBuilder.Entity("OES.API.Domain.Identity.AppUser", b =>
+                {
+                    b.HasBaseType("OES.API.Domain.Identity.BaseUser");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasDiscriminator().HasValue("AppUser");
+
                     b.HasData(
                         new
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "84229bb0-16ff-48b6-937c-70f00cc32f7f",
+                            ConcurrencyStamp = "78e06a32-0c7f-4750-90ce-700510337742",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
-                            Name = "admin",
+                            Name = "Eray",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJbJQ/ok+048K6FYr612Fl7wS52R33GNkxrQ9vKsLojmJ341PuKIj6XNOPJV8odoRw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBGuYXZoGg8qeip6scXGZ7Vc5igTkb9VyBKAXZ5UZTbLDJsvED0B1U5diQfhKtlplA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
-                            UserName = "admin"
+                            UserName = "admin",
+                            Surname = "Berberoğlu"
                         });
                 });
 
@@ -448,7 +464,7 @@ namespace OES.API.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Identity.BaseUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -457,7 +473,7 @@ namespace OES.API.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Identity.BaseUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -472,7 +488,7 @@ namespace OES.API.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Identity.BaseUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -481,7 +497,7 @@ namespace OES.API.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("OES.API.Domain.Identity.AppUser", null)
+                    b.HasOne("OES.API.Domain.Identity.BaseUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

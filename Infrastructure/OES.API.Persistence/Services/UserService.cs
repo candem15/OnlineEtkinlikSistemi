@@ -36,18 +36,13 @@ namespace OES.API.Persistence.Services
             ValidationResult validationResult = await _validator.ValidateAsync(createUser);
             if (!validationResult.IsValid)
                 return new CreateUserResponse() { Message = "Hatalı kullanıcı oluşturma bilgileri girdiniz!", Succeeded = false };
-                createUser.Id = Guid.NewGuid().ToString();
+            createUser.Id = Guid.NewGuid().ToString();
             IdentityResult result = await _userManager.CreateAsync(createUser, user.Password);
 
             CreateUserResponse response = new() { Succeeded = result.Succeeded };
-            if (createUser.WebAddressUrl != null && createUser.Surname != null)
-                response.Succeeded = false;
             if (result.Succeeded)
             {
-                if (createUser.WebAddressUrl != null)
-                    await _userManager.AddToRoleAsync(createUser, "Firma");
-                else
-                    await _userManager.AddToRoleAsync(createUser, "Basit");
+                await _userManager.AddToRoleAsync(createUser, "Basit");
                 response.Message = "Kullanıcı başarıyla oluşturulmuştur!";
                 return response;
             }
@@ -80,7 +75,6 @@ namespace OES.API.Persistence.Services
                 Email = user.Email,
                 Name = user.Name,
                 Surname = user.Surname,
-                WebAddressUrl = user.WebAddressUrl
             };
         }
 

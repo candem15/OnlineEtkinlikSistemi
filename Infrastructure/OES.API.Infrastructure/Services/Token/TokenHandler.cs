@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 
 namespace OES.API.Infrastructure.Services.Token
 {
-    public class TokenHandler : ITokenHandler
+    public class TokenHandler<T> : ITokenHandler<T> where T : BaseUser
     {
         private IConfiguration _configuration;
-        private UserManager<AppUser> _userManager;
-        public TokenHandler(IConfiguration configuration, UserManager<AppUser> userManager)
+        private UserManager<T> _userManager;
+        public TokenHandler(IConfiguration configuration, UserManager<T> userManager)
         {
             _configuration = configuration;
             _userManager = userManager;
         }
-        public async Task<Application.Dtos.Token> CreateAccessToken(int dakika, AppUser user)
+        public async Task<Application.Dtos.Token> CreateAccessToken(int dakika, T user)
         {
             Application.Dtos.Token token = new();
 
@@ -42,11 +42,11 @@ namespace OES.API.Infrastructure.Services.Token
                 //new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("userId", user.Id)
             };
-
-            var roles = await _userManager.GetRolesAsync(user);
-
-            claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
-
+            if (typeof(T) != typeof(AppCompany))
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                claims.AddRange(roles.Select(role => new Claim(ClaimsIdentity.DefaultRoleClaimType, role)));
+            }
             JwtSecurityToken jwtSecurityToken = new JwtSecurityToken
                 (
                 audience: _configuration["Token:Audience"],

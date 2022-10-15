@@ -37,8 +37,9 @@ namespace OES.API.Persistence.Services
         private IQuotaReadRepository _quotaReadRepository;
         private IQuotaWriteRepository _quotaWriteRepository;
         private UserManager<AppUser> _userManager;
+        private UserManager<AppCompany> _companyManager;
         private IMapper _mapper;
-        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper, UserManager<AppUser> userManager)
+        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper, UserManager<AppUser> userManager, UserManager<AppCompany> companyManager)
         {
             _eventReadRepository = eventReadRepository;
             _eventWriteRepository = eventWriteRepository;
@@ -48,6 +49,7 @@ namespace OES.API.Persistence.Services
             _quotaWriteRepository = quotaWriteRepository;
             _mapper = mapper;
             _userManager = userManager;
+            _companyManager = companyManager;
         }
         public async Task<CreateEventCommandResponse> CreateAsync(CreateEventCommandRequest createEvent)
         {
@@ -65,7 +67,12 @@ namespace OES.API.Persistence.Services
                 City = await _cityReadRepository.GetByIdAsync(createEvent.CityId),
                 Category = await _categoryReadRepository.GetByIdAsync(createEvent.CategoryId),
                 Ticket = createEvent.TicketPrice != null ? new Ticket() { EventId = newId, TicketPrice = (double)createEvent.TicketPrice } : null,
-                Quota = new Quota() { EventId = newId, MaxParticipantsNumber = (int)createEvent.MaxParticipantsNumber, NumberOfParticipants = 0 }
+                Quota = new Quota()
+                {
+                    EventId = newId,
+                    MaxParticipantsNumber = createEvent.MaxParticipantsNumber,
+                    NumberOfParticipants = 0
+                }
             };
             await _eventWriteRepository.AddAsync(newEvent);
             await _eventWriteRepository.SaveChangesAsync();
@@ -112,7 +119,7 @@ namespace OES.API.Persistence.Services
         public async Task<GetAllUnconfirmedEventsQueryResponse> GetAllUnconfirmedEventsAsync(GetAllUnconfirmedEventsQueryRequest events)
         {
             _eventReadRepository.EnableLazyLoading();
-            List<Event> unconfirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == false).ToList();
+            List<Event> unconfirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == null).ToList();
 
             return new GetAllUnconfirmedEventsQueryResponse() { Events = _mapper.Map<List<UnconfirmedEventsResponse>>(unconfirmedEvents) };
         }
@@ -121,13 +128,19 @@ namespace OES.API.Persistence.Services
         {
             _eventReadRepository.EnableLazyLoading();
             List<Event> confirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == true).ToList();
+            //List<ConfirmedEventsResponse> confirmedEvents = _eventReadRepository.GetWhere(x => x.EventConfirmation == true).Select(x => new ConfirmedEventsResponse
+            //{
+            //    Id = x.Id.ToString(),
+            //    CategoryName = x.Category.CategoryName,
+            //    Address = x.Address,
+            //    ApplicationDeadline = x.ApplicationDeadline,
+            //    CityName = x.City.CityName,
+            //    EventDate = x.EventDate,
+            //    MaxParticipantsNumber = x.Quota.MaxParticipantsNumber,
+            //    TicketPrice = x.Ticket.TicketPrice
+            //}).ToList();
 
             return new GetAllConfirmedEventsQueryResponse() { Events = _mapper.Map<List<ConfirmedEventsResponse>>(confirmedEvents) };
-        }
-
-        public async Task<GetAllEventsByUserQueryResponse> GetAllEventsByUserAsync(GetAllEventsByUserQueryRequest userMail)
-        {
-            return null;
         }
 
         public async Task<ConfirmEventCommandResponse> ConfirmEventAsync(ConfirmEventCommandRequest confirmEvent)
@@ -165,13 +178,14 @@ namespace OES.API.Persistence.Services
                 if (eventToJoin.Users.Any(x => x.Id == joinToEvent.Id))
                     throw new AlreadyJoinedToEventException();
                 AppUser joinEventUser = await _userManager.FindByIdAsync(joinToEvent.Id);
-                Quota quotaToUpdate = _quotaReadRepository.GetWhere(x => x.EventId == Guid.Parse(joinToEvent.EventId)).FirstOrDefault();
-                if (quotaToUpdate.NumberOfParticipants >= quotaToUpdate.MaxParticipantsNumber)
+                //Quota quotaToUpdate = _quotaReadRepository.GetWhere(x => x.EventId == Guid.Parse(joinToEvent.EventId)).FirstOrDefault();
+                if (eventToJoin.Quota.NumberOfParticipants >= eventToJoin.Quota.MaxParticipantsNumber)
                     throw new QuotaFullException();
+                eventToJoin.Quota.NumberOfParticipants += 1;
                 eventToJoin.Users.Add(joinEventUser);
-                quotaToUpdate.NumberOfParticipants += 1;
-                _quotaWriteRepository.Update(quotaToUpdate);
-                _quotaWriteRepository.SaveChangesAsync();
+                //quotaToUpdate.NumberOfParticipants += 1;
+                //_quotaWriteRepository.Update(quotaToUpdate);
+                //_quotaWriteRepository.SaveChangesAsync();
                 _eventWriteRepository.SaveChangesAsync();
             }
             catch
@@ -183,8 +197,9 @@ namespace OES.API.Persistence.Services
 
         public async Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request)
         {
-            List<AppUser> companies = _userManager.Users.Where(x => x.WebAddressUrl != null).ToList();
-            return new GetCompaniesToBuyTicketQueryResponse() { Companies = _mapper.Map<List<GetCompaniesToBuyTicketResponse>>(companies) };
+            List<GetCompaniesToBuyTicketResponse>? companies = _companyManager?.Users?.Select(x => new GetCompaniesToBuyTicketResponse { CompanyName = x.Name, WebsiteDomain = x.WebsiteDomain }).ToList();
+
+            return new GetCompaniesToBuyTicketQueryResponse() { Companies = companies };
         }
 
         public async Task<GetEventsByOrganizerQueryResponse> GetEventsByOrganizerAsync(GetEventsByOrganizerQueryRequest request)
