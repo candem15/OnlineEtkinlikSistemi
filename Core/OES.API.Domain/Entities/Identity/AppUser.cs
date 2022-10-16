@@ -1,12 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using OES.API.Domain.Entities;
-using OES.API.Domain.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using OES.API.Domain.Entities;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace OES.API.Domain.Identity
 {

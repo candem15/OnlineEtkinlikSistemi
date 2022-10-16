@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using OES.API.Application;
 using OES.API.Infrastructure;
 using OES.API.Persistence;
-using System.Reflection;
 using System.Security.Claims;
 using System.Text;
 

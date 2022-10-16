@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.Event.ConfirmEvent;
 using OES.API.Application.Features.Commands.Event.CreateEvent;
@@ -8,12 +8,12 @@ using OES.API.Application.Features.Commands.Event.DeleteEvent;
 using OES.API.Application.Features.Commands.Event.JoinToEvent;
 using OES.API.Application.Features.Commands.Event.RejectEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
+using OES.API.Application.Features.Queries.AppCompany.GetCompaniesToBuyTicket;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
-using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
 using OES.API.Application.Features.Queries.Event.GetEventsByUser;
-using OES.API.Application.Features.Queries.Event.GetEventsInXml;
+using OES.API.Application.Validators;
 
 namespace OES.API.WebApi.Controllers
 {
@@ -32,6 +32,9 @@ namespace OES.API.WebApi.Controllers
         [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
         public async Task<IActionResult> CreateEvent(CreateEventCommandRequest createEventCommandRequest)
         {
+            ValidationResult result = new CreateEventValidator().Validate(createEventCommandRequest);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
             createEventCommandRequest.Id = User.FindFirst("userId")?.Value;
             CreateEventCommandResponse response = await _mediatR.Send(createEventCommandRequest);
             return Ok(response);
@@ -41,6 +44,9 @@ namespace OES.API.WebApi.Controllers
         [Authorize(AuthenticationSchemes = "Default", Roles = "Basit")]
         public async Task<IActionResult> UpdateEvent(UpdateEventCommandRequest updateEventCommandRequest)
         {
+            ValidationResult result = new UpdateEventValidator().Validate(updateEventCommandRequest);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
             UpdateEventCommandResponse response = await _mediatR.Send(updateEventCommandRequest);
             return Ok(response);
         }

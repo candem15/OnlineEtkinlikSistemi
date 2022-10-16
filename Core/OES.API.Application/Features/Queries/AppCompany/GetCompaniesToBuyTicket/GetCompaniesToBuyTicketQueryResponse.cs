@@ -1,6 +1,6 @@
 ﻿using OES.API.Application.Dtos.Event;
 
-namespace OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket
+namespace OES.API.Application.Features.Queries.AppCompany.GetCompaniesToBuyTicket
 {
     public class GetCompaniesToBuyTicketQueryResponse
     {

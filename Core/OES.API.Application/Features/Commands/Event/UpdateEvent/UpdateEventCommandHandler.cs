@@ -1,10 +1,5 @@
 ﻿using MediatR;
 using OES.API.Application.Abstractions.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Application.Features.Commands.Event.UpdateEvent
 {
@@ -21,7 +16,7 @@ namespace OES.API.Application.Features.Commands.Event.UpdateEvent
         {
             UpdateEventCommandResponse response = await _eventService.UpdateAsync(request);
 
-            return response;    
+            return response;
         }
     }
 }

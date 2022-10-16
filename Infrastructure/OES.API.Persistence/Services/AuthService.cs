@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Abstractions.Token;
 using OES.API.Application.Dtos;
 using OES.API.Application.Exceptions;
 using OES.API.Application.Features.Commands.AppUser.LoginUser;
 using OES.API.Domain.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Persistence.Services
 {
@@ -18,17 +12,13 @@ namespace OES.API.Persistence.Services
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly ITokenHandler<AppUser> _tokenHandler;
-        private readonly IConfiguration _configuration;
         readonly SignInManager<AppUser> _signInManager;
-        private readonly IUserService _userService;
 
-        public AuthService(UserManager<AppUser> userManager, ITokenHandler<AppUser> tokenHandler, IConfiguration configuration, SignInManager<AppUser> signInManager, IUserService userService)
+        public AuthService(UserManager<AppUser> userManager, ITokenHandler<AppUser> tokenHandler, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _tokenHandler = tokenHandler;
-            _configuration = configuration;
             _signInManager = signInManager;
-            _userService = userService;
         }
         public async Task<LoginUserCommandResponse> LoginAsync(LoginUserCommandRequest request)
         {

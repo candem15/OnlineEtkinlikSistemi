@@ -11,14 +11,8 @@ using OES.API.Application.Features.Commands.Category.CreateCategory;
 using OES.API.Application.Features.Commands.Category.UpdateCategory;
 using OES.API.Application.Features.Commands.City.CreateCity;
 using OES.API.Application.Features.Commands.City.UpdateCity;
-using OES.API.Application.Features.Commands.Event.CreateEvent;
 using OES.API.Domain.Entities;
 using OES.API.Domain.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Application.Mapping
 {

@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using OES.API.Application.Abstractions.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Application.Features.Commands.AppUser.CreateUser
 {

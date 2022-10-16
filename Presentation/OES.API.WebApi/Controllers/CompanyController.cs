@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.AppCompany.LoginCompany;
 using OES.API.Application.Features.Commands.AppCompany.RegisterCompany;
 using OES.API.Application.Features.Queries.Event.GetEventsInXml;
+using OES.API.Application.Validators;
 
 namespace OES.API.WebApi.Controllers
 {
@@ -22,6 +23,9 @@ namespace OES.API.WebApi.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterCompany(RegisterCompanyCommandRequest registerCompanyCommandRequest)
         {
+            ValidationResult result = new RegisterCompanyValidator().Validate(registerCompanyCommandRequest);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
             RegisterCompanyCommandResponse response = await _mediatR.Send(registerCompanyCommandRequest);
 
             return AcceptedAtAction(nameof(RegisterCompany));

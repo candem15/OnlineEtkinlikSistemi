@@ -11,20 +11,13 @@ using OES.API.Application.Features.Commands.Event.JoinToEvent;
 using OES.API.Application.Features.Commands.Event.RejectEvent;
 using OES.API.Application.Features.Commands.Event.UpdateEvent;
 using OES.API.Application.Features.Queries.Event.GetAllConfirmedEvents;
-using OES.API.Application.Features.Queries.Event.GetAllEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetAllUnconfirmedEvents;
-using OES.API.Application.Features.Queries.Event.GetCompaniesToBuyTicket;
 using OES.API.Application.Features.Queries.Event.GetEventsByOrganizer;
 using OES.API.Application.Features.Queries.Event.GetEventsByUser;
 using OES.API.Application.Features.Queries.Event.GetEventsInXml;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
 using OES.API.Domain.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Persistence.Services
 {
@@ -37,9 +30,8 @@ namespace OES.API.Persistence.Services
         private IQuotaReadRepository _quotaReadRepository;
         private IQuotaWriteRepository _quotaWriteRepository;
         private UserManager<AppUser> _userManager;
-        private UserManager<AppCompany> _companyManager;
         private IMapper _mapper;
-        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper, UserManager<AppUser> userManager, UserManager<AppCompany> companyManager)
+        public EventService(IEventReadRepository eventReadRepository, IEventWriteRepository eventWriteRepository, ICategoryReadRepository categoryReadRepository, ICityReadRepository cityReadRepository, IQuotaReadRepository quotaReadRepository, IQuotaWriteRepository quotaWriteRepository, IMapper mapper, UserManager<AppUser> userManager)
         {
             _eventReadRepository = eventReadRepository;
             _eventWriteRepository = eventWriteRepository;
@@ -49,7 +41,6 @@ namespace OES.API.Persistence.Services
             _quotaWriteRepository = quotaWriteRepository;
             _mapper = mapper;
             _userManager = userManager;
-            _companyManager = companyManager;
         }
         public async Task<CreateEventCommandResponse> CreateAsync(CreateEventCommandRequest createEvent)
         {
@@ -195,13 +186,6 @@ namespace OES.API.Persistence.Services
             return new JoinToEventCommandResponse();
         }
 
-        public async Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request)
-        {
-            List<GetCompaniesToBuyTicketResponse>? companies = _companyManager?.Users?.Select(x => new GetCompaniesToBuyTicketResponse { CompanyName = x.Name, WebsiteDomain = x.WebsiteDomain }).ToList();
-
-            return new GetCompaniesToBuyTicketQueryResponse() { Companies = companies };
-        }
-
         public async Task<GetEventsByOrganizerQueryResponse> GetEventsByOrganizerAsync(GetEventsByOrganizerQueryRequest request)
         {
             _eventReadRepository.EnableLazyLoading();
@@ -219,7 +203,7 @@ namespace OES.API.Persistence.Services
 
         public async Task<GetEventsByUserQueryResponse> GetEventsByUserAsync(GetEventsByUserQueryRequest request)
         {
-            AppUser user = await _userManager.Users.Include(x => x.Events).ThenInclude(x => x.Quota)
+            AppUser user = await _userManager.Users.Include(x => x.Events)?.ThenInclude(x => x.Quota)
                 .Include(x => x.Events).ThenInclude(x => x.Ticket)
                 .Include(x => x.Events).ThenInclude(x => x.Category)
                 .Include(x => x.Events).ThenInclude(x => x.City)

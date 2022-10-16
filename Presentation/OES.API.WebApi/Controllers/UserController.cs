@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using FluentValidation.Results;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.AppUser.CreateUser;
 using OES.API.Application.Features.Commands.AppUser.UpdatePassword;
 using OES.API.Application.Features.Queries.AppUser.GetUserDetails;
-using System.Security.Claims;
+using OES.API.Application.Validators;
 
 namespace OES.API.WebApi.Controllers
 {
@@ -23,6 +23,9 @@ namespace OES.API.WebApi.Controllers
         [HttpPost("create-user")]
         public async Task<IActionResult> CreateUser(CreateUserCommandRequest createUserCommandRequest)
         {
+            ValidationResult result = new CreateUserValidator().Validate(createUserCommandRequest);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
             CreateUserCommandResponse response = await _mediatR.Send(createUserCommandRequest);
             return Ok(response);
         }
@@ -31,6 +34,9 @@ namespace OES.API.WebApi.Controllers
         [Authorize(AuthenticationSchemes = "Default", Roles = "Firma,Basit")]
         public async Task<IActionResult> UpdatePassword(UpdatePasswordCommandRequest updatePasswordCommandRequest)
         {
+            ValidationResult result = new UpdatePasswordValidator().Validate(updatePasswordCommandRequest);
+            if (!result.IsValid)
+                return BadRequest(result.Errors);
             updatePasswordCommandRequest.Id = User.FindFirst("userId")?.Value;
             UpdatePasswordCommandResponse response = await _mediatR.Send(updatePasswordCommandRequest);
             return Ok(response);

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Dtos.Category;
 using OES.API.Application.Features.Commands.Category.CreateCategory;
@@ -9,11 +7,6 @@ using OES.API.Application.Features.Commands.Category.UpdateCategory;
 using OES.API.Application.Features.Queries.Category.GetAllCategories;
 using OES.API.Application.Repositories;
 using OES.API.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Persistence.Services
 {
@@ -22,21 +15,14 @@ namespace OES.API.Persistence.Services
         private ICategoryWriteRepository _categoryWriteRepository;
         private ICategoryReadRepository _categoryReadRepository;
         private IMapper _mapper;
-        private IValidator<Category> _validator;
-        public CategoryService(ICategoryWriteRepository categoryWriteRepository, ICategoryReadRepository categoryReadRepository, IMapper mapper, IValidator<Category> validator)
+        public CategoryService(ICategoryWriteRepository categoryWriteRepository, ICategoryReadRepository categoryReadRepository, IMapper mapper)
         {
             _categoryWriteRepository = categoryWriteRepository;
             _categoryReadRepository = categoryReadRepository;
             _mapper = mapper;
-            _validator = validator;
         }
         public async Task<CreateCategoryCommandResponse> CreateAsync(Category category)
         {
-            ValidationResult result = await _validator.ValidateAsync(category);
-            if (!result.IsValid)
-            {
-                return new CreateCategoryCommandResponse() { Message = "Kategori ismi boş geçilemez!", Succeeded = false };
-            }
             bool categoryExists = _categoryReadRepository.GetWhere(x => x.CategoryName == category.CategoryName).Any();
             if (categoryExists)
             {
@@ -68,11 +54,6 @@ namespace OES.API.Persistence.Services
 
         public async Task<UpdateCategoryCommandResponse> UpdateAsync(Category category)
         {
-            ValidationResult result = await _validator.ValidateAsync(category);
-            if (!result.IsValid)
-            {
-                return new UpdateCategoryCommandResponse() { Message = "Kategori ismi boş geçilemez!", Succeeded = false };
-            }
             Category categoryToUpdate = await _categoryReadRepository.GetByIdAsync(category.Id.ToString());
             if (categoryToUpdate == null)
             {

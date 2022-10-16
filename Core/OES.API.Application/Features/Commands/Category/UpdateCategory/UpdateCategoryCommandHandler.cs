@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using OES.API.Application.Abstractions.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Application.Features.Commands.Category.UpdateCategory
 {
@@ -24,7 +19,7 @@ namespace OES.API.Application.Features.Commands.Category.UpdateCategory
         {
             UpdateCategoryCommandResponse response = await _categoryService.UpdateAsync(_mapper.Map<Domain.Entities.Category>(request));
 
-            return response;    
+            return response;
         }
     }
 }

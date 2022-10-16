@@ -1,34 +1,27 @@
 ﻿using AutoMapper;
-using FluentValidation;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
 using OES.API.Application.Abstractions.Services;
 using OES.API.Application.Abstractions.Token;
 using OES.API.Application.Dtos;
+using OES.API.Application.Dtos.Event;
 using OES.API.Application.Exceptions;
 using OES.API.Application.Features.Commands.AppCompany.LoginCompany;
 using OES.API.Application.Features.Commands.AppCompany.RegisterCompany;
+using OES.API.Application.Features.Queries.AppCompany.GetCompaniesToBuyTicket;
 using OES.API.Domain.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Persistence.Services
 {
     public class CompanyService : ICompanyService
     {
         readonly UserManager<AppCompany> _companyManager;
-        readonly IValidator<AppCompany> _validator;
         readonly ITokenHandler<AppCompany> _tokenHandler;
         readonly SignInManager<AppCompany> _signInManager;
         readonly IMapper _mapper;
 
-        public CompanyService(UserManager<AppCompany> companyManager, IValidator<AppCompany> validator, IMapper mapper, ITokenHandler<AppCompany> tokenHandler, SignInManager<AppCompany> signInManager)
+        public CompanyService(UserManager<AppCompany> companyManager, IMapper mapper, ITokenHandler<AppCompany> tokenHandler, SignInManager<AppCompany> signInManager)
         {
             _companyManager = companyManager;
-            _validator = validator;
             _mapper = mapper;
             _tokenHandler = tokenHandler;
             _signInManager = signInManager;
@@ -37,23 +30,17 @@ namespace OES.API.Persistence.Services
         public async Task<RegisterCompanyCommandResponse> RegisterCompanyAsync(RegisterCompanyCommandRequest company)
         {
             AppCompany registerCompany = _mapper.Map<AppCompany>(company);
-            ValidationResult validationResult = await _validator.ValidateAsync(registerCompany);
-            if (!validationResult.IsValid)
-                throw new Exception("Hatalı kayıt değerleri girdiniz!");
             registerCompany.Id = Guid.NewGuid().ToString();
             IdentityResult result = await _companyManager.CreateAsync(registerCompany, company.Password);
 
-
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                return new RegisterCompanyCommandResponse();
-            }
-            else
                 foreach (var error in result.Errors)
                 {
                     if (error.Code == "DuplicateEmail")
-                        throw new Exception("Bu email ile oluşturulmuş hali hazırda bir firma bulunmaktadır.");
+                        throw new DuplicateEmailException();
                 }
+            }
 
             return new RegisterCompanyCommandResponse();
         }
@@ -75,5 +62,12 @@ namespace OES.API.Persistence.Services
             throw new WrongPasswordException();
         }
 
+
+        public async Task<GetCompaniesToBuyTicketQueryResponse> GetCompaniesToBuyTicketAsync(GetCompaniesToBuyTicketQueryRequest request)
+        {
+            List<GetCompaniesToBuyTicketResponse>? companies = _companyManager?.Users?.Select(x => new GetCompaniesToBuyTicketResponse { CompanyName = x.Name, WebsiteDomain = x.WebsiteDomain }).ToList();
+
+            return new GetCompaniesToBuyTicketQueryResponse() { Companies = companies };
+        }
     }
 }

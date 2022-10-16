@@ -7,11 +7,6 @@ using OES.API.Domain.Identity;
 using OES.API.Persistence.Contexts;
 using OES.API.Persistence.Repositories;
 using OES.API.Persistence.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OES.API.Persistence
 {
@@ -38,7 +33,7 @@ namespace OES.API.Persistence
 
             services.AddIdentityCore<AppCompany>().AddEntityFrameworkStores<OESAPIDbContext>()
             //.AddTokenProvider<DataProtectorTokenProvider<AppCompany>>(TokenOptions.DefaultProvider)
-            .AddSignInManager<SignInManager<AppCompany>>(); 
+            .AddSignInManager<SignInManager<AppCompany>>();
 
             services.AddScoped<IEventReadRepository, EventReadRepository>();
             services.AddScoped<IEventWriteRepository, EventWriteRepository>();
