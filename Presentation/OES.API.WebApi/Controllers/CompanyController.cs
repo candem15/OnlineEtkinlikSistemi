@@ -1,6 +1,7 @@
 ﻿using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.AppCompany.LoginCompany;
 using OES.API.Application.Features.Commands.AppCompany.RegisterCompany;
@@ -9,6 +10,7 @@ using OES.API.Application.Validators;
 
 namespace OES.API.WebApi.Controllers
 {
+    [EnableCors("CompanyPolicy")]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]

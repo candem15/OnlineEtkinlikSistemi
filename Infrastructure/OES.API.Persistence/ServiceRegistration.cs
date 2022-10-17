@@ -24,10 +24,11 @@ namespace OES.API.Persistence
             {
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireDigit = false;
+                options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.User.RequireUniqueEmail = true; //Unique email adresi ile kayıt sağlar
+                options.User.AllowedUserNameCharacters = "abcçdefghiıjklmnoöpqrsştuüvwxyzABCÇDEFGHIİJKLMNOÖPQRSŞTUÜVWXYZ0123456789 -._@+"; // Türkçe karakterli username oluşturabilmemiz için
             }).AddEntityFrameworkStores<OESAPIDbContext>()
             .AddTokenProvider<DataProtectorTokenProvider<AppUser>>(TokenOptions.DefaultProvider); //Şifre değişikliği için gerekli provider bilgisi eklendi.
 

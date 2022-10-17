@@ -311,14 +311,14 @@ namespace OES.API.Persistence.Migrations
                         new
                         {
                             Id = "2c5e174e-3b0e-446f-86af-483d56fd7210",
-                            ConcurrencyStamp = "85547760-db56-4901-afa0-396f52047664",
+                            ConcurrencyStamp = "afa2032c-3b6a-4738-a65b-803c0227b678",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "391c72c8-9403-4c93-a4a4-4c2febd00d74",
-                            ConcurrencyStamp = "19a3a443-0dbc-4d4b-8287-e61e1cb151b9",
+                            ConcurrencyStamp = "94dd748b-0e21-4ffa-84d9-aea4506ad1ef",
                             Name = "Basit",
                             NormalizedName = "BASIT"
                         });
@@ -424,13 +424,13 @@ namespace OES.API.Persistence.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "78e06a32-0c7f-4750-90ce-700510337742",
+                            ConcurrencyStamp = "017c7d6a-94d1-48b8-8e73-0ccbc0988854",
                             Email = "admin@admin.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Eray",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBGuYXZoGg8qeip6scXGZ7Vc5igTkb9VyBKAXZ5UZTbLDJsvED0B1U5diQfhKtlplA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOYcm93pmfM+LN9IVi98J31XJUy0XrgU2CoB9qUXScFh+fC/5/pjqMnuR/9tpwQxUA==",
                             PhoneNumberConfirmed = false,
                             TwoFactorEnabled = false,
                             UserName = "admin",

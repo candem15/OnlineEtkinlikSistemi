@@ -14,8 +14,8 @@ namespace OES.API.Application.Validators
             RuleFor(c => c.CityId).NotNull().NotEmpty();
             RuleFor(c => c.TicketPrice).GreaterThan(0);
             RuleFor(c => c.Description).NotNull().MinimumLength(15);
-            RuleFor(c => c.ApplicationDeadline).NotNull().GreaterThanOrEqualTo(c => c.EventDate);
-            RuleFor(c => c.EventDate).NotNull().LessThanOrEqualTo(c => c.ApplicationDeadline);
+            RuleFor(c => c.ApplicationDeadline).NotNull().LessThanOrEqualTo(c => c.EventDate).GreaterThanOrEqualTo(DateTime.UtcNow);
+            RuleFor(c => c.EventDate).NotNull().GreaterThanOrEqualTo(c => c.ApplicationDeadline).GreaterThanOrEqualTo(DateTime.UtcNow);
         }
     }
 }

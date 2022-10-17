@@ -22,9 +22,17 @@ builder.Services.AddControllers()
         opt.RegisterValidatorsFromAssemblyContaining(typeof(Program));
     });
 
-builder.Services.AddCors(opt => opt.AddDefaultPolicy(policy =>
-    policy.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod()
-));
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("ClientPolicy", policy =>
+    {
+        policy.WithOrigins("https://localhost:4200", "http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+    });
+    opt.AddPolicy("CompanyPolicy", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+    });
+});
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

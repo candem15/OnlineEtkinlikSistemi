@@ -1,9 +1,11 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using OES.API.Application.Features.Commands.AppUser.LoginUser;
 
 namespace OES.API.WebApi.Controllers
 {
+    [EnableCors("ClientPolicy")]
     [Route("api/[controller]")]
     [Produces("application/json")]
     [ApiController]
