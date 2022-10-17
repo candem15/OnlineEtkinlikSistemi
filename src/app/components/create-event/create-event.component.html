@@ -41,10 +41,10 @@
           <label class="form-label" for="loginPassword">Açıklama</label>
           <small class="form-text invalid-feedback"
             *ngIf="componentEvent.description.errors?.required && (componentEvent.description.touched || eventSubmitted)">
-            Lütfen adres giriniz!</small>
+            Lütfen açıklama giriniz!</small>
           <small class="form-text invalid-feedback"
             *ngIf="(componentEvent.description.errors?.minlength || componentEvent.description.errors?.maxlength) && (componentEvent.description.touched || eventSubmitted)">
-            Adres tanımlaması 10-250 karakterden oluşmalıdır!</small>
+            Açıklama 15-250 karakterden oluşmalıdır!</small>
         </div>
         <br>
         <!-- ticket input -->

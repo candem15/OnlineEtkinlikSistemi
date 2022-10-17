@@ -48,6 +48,7 @@ export class RegisterLoginComponent extends BaseComponent implements OnInit {
         ]],
       surname: ["",
         [
+          Validators.required,
           Validators.minLength(2),
           Validators.maxLength(50),
         ]],
@@ -70,12 +71,12 @@ export class RegisterLoginComponent extends BaseComponent implements OnInit {
       password: ["",
         [
           Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(50)
+          Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,30}$/)
         ]],
       passwordConfirm: ["",
         [
-          Validators.required
+          Validators.required,
+          Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,30}$/)
         ]]
     })
     this.frmLogin = this.formBuilder.group({

@@ -38,7 +38,11 @@ const routes: Routes = [
   {
     path: "user-activities", loadChildren: () => import("./components/user-activities/user-activities.module").then
       (module => module.UserActivitiesModule), canActivate: [AuthGuard]
-  }
+  },
+  {
+    path: "", loadChildren: () => import("./components/home/home.module").then
+      (module => module.HomeModule)
+  },
 ];
 
 @NgModule({

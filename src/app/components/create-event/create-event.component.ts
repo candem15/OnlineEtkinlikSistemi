@@ -57,7 +57,9 @@ export class CreateEventComponent extends BaseComponent implements OnInit {
         ]],
       description: ["",
         [
-          Validators.required
+          Validators.required,
+          Validators.minLength(15),
+          Validators.maxLength(250),
         ]],
       categoryId: ["",
         [

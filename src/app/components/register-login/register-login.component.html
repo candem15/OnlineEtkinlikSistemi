@@ -132,18 +132,21 @@
               *ngIf="componentRegister.password.errors?.required && (componentRegister.password.touched || registerSubmitted)">
               Lütfen şifreyi boş geçmeyiniz!</small>
             <small class="form-text invalid-feedback"
-              *ngIf="(componentRegister.password.errors?.minlength||componentRegister.password.errors?.maxlength) && (componentRegister.password?.touched || registerSubmitted)">
-              Şifre en az 8 karakterden oluşmalıdır!</small>
-            <small class="form-text invalid-feedback"
               *ngIf="componentRegister.password.errors?.notsame && registerSubmitted">
               Şifre ve şifre tekrarı aynı olmalıdır!</small>
+              <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.password.errors?.pattern && registerSubmitted">
+              Şifre en az 8 karakterden oluşup en az 1 harf ve en az 1 rakam içermelidir!</small>
           </div>
 
           <!-- Password Confirm input -->
           <div class="form-outline mb-6">
-            <input formControlName="passwordConfirm" type="password" id="registerPasswordConfirm"
+            <input formControlName="passwordConfirm" type="password" id="registerPasswordConfirm" [ngClass]="{'is-invalid': registerSubmitted && componentRegister.passwordConfirm.errors}"
               class="form-control" />
             <label class="form-label" for="registerPasswordConfirm">Şifre Tekrar</label>
+            <small class="form-text invalid-feedback"
+              *ngIf="componentRegister.passwordConfirm.errors?.required && (componentRegister.passwordConfirm.touched || registerSubmitted)">
+              Lütfen şifre tekrarını boş geçmeyiniz!</small>
           </div>
           <br>
           <!-- Submit button -->
